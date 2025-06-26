@@ -1,6 +1,8 @@
-import React from 'react';
+import React , { useState }from 'react';
+
 import {  Settings, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
+
 
 interface HeaderProps {
   currentUser?: {
@@ -13,12 +15,13 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, currentView }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
   const navItems = [
     { id: 'En ligne', label: 'En ligne' },
     { id: 'correspondances', label: 'Correspondances' },
     { id: 'rechercher', label: 'Rechercher' },
     { id: 'messages',  label: 'Messages' },
-    { id: 'activités', label: 'Activités' },
+  
     { id: 'profile',  label: 'Profil' },
     
     
@@ -62,6 +65,40 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
                 <span className="font-medium">{item.label}</span>
               </motion.button>
             ))}
+            <div
+  className="relative"
+  onMouseEnter={() => setShowDropdown(true)}
+  onMouseLeave={() => setShowDropdown(false)}
+>
+  <motion.button
+    key="activités"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    
+    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+      currentView === 'activités'
+        ? 'bg-primary-500 text-white shadow-lg'
+        : 'text-gray-600 hover:bg-gray-100'
+    }`}
+  >
+    <span className="font-medium">Activités</span>
+  </motion.button>
+
+  {showDropdown && (
+    <div className="absolute top-full mt-1 right-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+      {['likes', 'Favoris', 'Vue de profil', 'Liste Rouge'].map((option) => (
+        <button
+          key={option}
+          onClick={() => onNavigate(option)}
+          className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-700"
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
+
           </nav>
 
           {/* User Actions */}
