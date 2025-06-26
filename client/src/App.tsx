@@ -5,19 +5,22 @@ import { useAuth } from './hooks/useAuth';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { Header } from './components/layout/Header';
-import { DiscoverView } from './components/discover/DiscoverView';
-import { MatchesView } from './components/matches/MatchesView';
+import { EnligneView } from './components/Enligne/EnligneView';
+import { ActivitésView } from './components/activités/activitésView';
+import { CorrespondancesView } from './components/Correspondances/CorrespondancesView';
 import { MessagesView } from './components/messages/MessagesView';
 import { ProfileView } from './components/profile/ProfileView';
+import { RéglagesView } from './components/Réglages/RéglagesView';
 import { Heart } from 'lucide-react';
+import { RechercherView } from './components/Rechercher/RechercherView';
 
 type AuthView = 'login' | 'register';
-type AppView = 'discover' | 'matches' | 'messages' | 'profile';
+type AppView = 'En ligne' | 'Correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages';
 
 function App() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
   const [authView, setAuthView] = useState<AuthView>('login');
-  const [currentView, setCurrentView] = useState<AppView>('discover');
+  const [currentView, setCurrentView] = useState<AppView>('En ligne');
 
   // Loading screen
   if (isLoading) {
@@ -32,7 +35,7 @@ function App() {
             <Heart className="w-10 h-10 text-primary-500 animate-pulse" />
           </div>
           <h1 className="text-2xl font-display font-bold text-white mb-2">
-            AfroConnect
+            MeeTup
           </h1>
           <div className="flex items-center justify-center space-x-1">
             <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
@@ -111,9 +114,12 @@ function App() {
           transition={{ duration: 0.3 }}
           className="flex-1 flex flex-col"
         >
-          {currentView === 'discover' && <DiscoverView />}
-          {currentView === 'matches' && <MatchesView />}
+          {currentView === 'En ligne' && <EnligneView />}
+          {currentView === 'Correspondances' && <CorrespondancesView />}
           {currentView === 'messages' && <MessagesView />}
+          {currentView === 'activités' && <ActivitésView />}
+          {currentView === 'rechercher' && <RechercherView />}
+          {currentView === 'réglages' && <RéglagesView />}
           {currentView === 'profile' && user && <ProfileView user={user} />}
         </motion.div>
       </AnimatePresence>

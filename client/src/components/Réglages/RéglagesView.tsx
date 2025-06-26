@@ -4,7 +4,7 @@ import { Heart, MessageCircle, Calendar, Crown } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
 
-export const MatchesView: React.FC = () => {
+export const RéglagesView: React.FC = () => {
   const [matches] = useState<User[]>(mockUsers.slice(0, 4)); // Simulate matches
 
   return (
@@ -135,7 +135,7 @@ export const MatchesView: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-romantic text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-200"
             >
-              Start Discovering
+              Start discovering
             </motion.button>
           </div>
         )}

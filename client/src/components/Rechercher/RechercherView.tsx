@@ -6,7 +6,7 @@ import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
 import toast from 'react-hot-toast';
 
-export const DiscoverView: React.FC = () => {
+export const RechercherView: React.FC = () => {
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
@@ -54,7 +54,7 @@ export const DiscoverView: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-display font-bold text-gray-800">
-            Discover
+            discover
           </h1>
           <motion.button
             whileHover={{ scale: 1.05 }}

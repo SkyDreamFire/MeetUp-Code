@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, MessageCircle, Search, User, Bell, Settings, Crown } from 'lucide-react';
+import {  Settings, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeaderProps {
@@ -14,11 +14,13 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, currentView }) => {
   const navItems = [
-    { id: 'discover', icon: Search, label: 'Discover' },
-    { id: 'matches', icon: Heart, label: 'Matches' },
-    { id: 'messages', icon: MessageCircle, label: 'Messages' },
-    { id: 'profile', icon: User, label: 'Profile' },
-    { id: 'settings', icon: Settings, label: 'Settings' },
+    { id: 'En ligne', label: 'En ligne' },
+    { id: 'correspondances', label: 'Correspondances' },
+    { id: 'recherche', label: 'Rechercher' },
+    { id: 'messages',  label: 'Messages' },
+    { id: 'activités', label: 'Activités' },
+    { id: 'profile',  label: 'Profil' },
+    { id: 'settings',  label: 'Réglages' },
     
   ];
 
@@ -34,11 +36,9 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="flex items-center space-x-2 cursor-pointer"
-            onClick={() => onNavigate('discover')}
+            onClick={() => onNavigate('Search')}
           >
-            <div className="w-8 h-8 bg-gradient-romantic rounded-full flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
-            </div>
+           
             <span className="text-xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent">
               MeeTup
             </span>
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <item.icon className="w-5 h-5" />
+                
                 <span className="font-medium">{item.label}</span>
               </motion.button>
             ))}
@@ -77,14 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
               </motion.div>
             )}
             
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <Bell className="w-5 h-5" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary-500 rounded-full animate-pulse"></div>
-            </motion.button>
+         
 
             <motion.button
               whileHover={{ scale: 1.1 }}
@@ -120,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
                     : 'text-gray-600'
                 }`}
               >
-                <item.icon className="w-5 h-5" />
+                
                 <span className="text-xs font-medium">{item.label}</span>
               </motion.button>
             ))}
