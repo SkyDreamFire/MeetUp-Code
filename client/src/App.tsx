@@ -15,7 +15,7 @@ import { Heart } from 'lucide-react';
 import { RechercherView } from './components/Rechercher/RechercherView';
 
 type AuthView = 'login' | 'register';
-type AppView = 'En ligne' | 'Correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages';
+type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages';
 
 function App() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
@@ -115,7 +115,7 @@ function App() {
           className="flex-1 flex flex-col"
         >
           {currentView === 'En ligne' && <EnligneView />}
-          {currentView === 'Correspondances' && <CorrespondancesView />}
+          {currentView === 'correspondances' && <CorrespondancesView />}
           {currentView === 'messages' && <MessagesView />}
           {currentView === 'activités' && <ActivitésView />}
           {currentView === 'rechercher' && <RechercherView />}

@@ -16,11 +16,11 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
   const navItems = [
     { id: 'En ligne', label: 'En ligne' },
     { id: 'correspondances', label: 'Correspondances' },
-    { id: 'recherche', label: 'Rechercher' },
+    { id: 'rechercher', label: 'Rechercher' },
     { id: 'messages',  label: 'Messages' },
     { id: 'activités', label: 'Activités' },
     { id: 'profile',  label: 'Profil' },
-    { id: 'settings',  label: 'Réglages' },
+    
     
   ];
 
@@ -83,8 +83,10 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              onClick={() => onNavigate('réglages')}
             >
               <Settings className="w-5 h-5" />
+
             </motion.button>
 
             {currentUser?.photos && currentUser.photos[0] && (
