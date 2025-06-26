@@ -8,6 +8,8 @@ export interface User {
   isPremium: boolean;
   isOnline: boolean;
   lastSeen?: Date;
+  lastActive: number;
+  isNew?: boolean;
   interests: string[];
   lookingFor: string;
   gender: 'male' | 'female' | 'other';
