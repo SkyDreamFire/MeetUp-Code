@@ -13,6 +13,10 @@ export interface User {
   gender: 'male' | 'female' | 'other';
   occupation?: string;
   education?: string;
+  country?: string;
+  city?: string;
+  interest?: string;
+  
 }
 
 export interface Message {

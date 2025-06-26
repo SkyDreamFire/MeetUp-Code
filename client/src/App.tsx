@@ -6,16 +6,20 @@ import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { Header } from './components/layout/Header';
 import { EnligneView } from './components/Enligne/EnligneView';
-import { ActivitésView } from './components/activités/activitésView';
+import { VueDeProfilView } from './components/vueDeProfil/VueDeProfilView';
 import { CorrespondancesView } from './components/Correspondances/CorrespondancesView';
 import { MessagesView } from './components/messages/MessagesView';
 import { ProfileView } from './components/profile/ProfileView';
 import { RéglagesView } from './components/Réglages/RéglagesView';
+import { LikesView } from './components/likes/LikesView';
+import { FavorisView } from './components/favoris/FavorisView';
+
+import { ListeRougesView } from './components/ListeRouge/ListeRougesView';
 import { Heart } from 'lucide-react';
 import { RechercherView } from './components/Rechercher/RechercherView';
 
 type AuthView = 'login' | 'register';
-type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages';
+type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'Favoris'|'vue de profil' | 'Liste rouges';
 
 function App() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
@@ -117,9 +121,13 @@ function App() {
           {currentView === 'En ligne' && <EnligneView />}
           {currentView === 'correspondances' && <CorrespondancesView />}
           {currentView === 'messages' && <MessagesView />}
-          {currentView === 'activités' && <ActivitésView />}
+        
           {currentView === 'rechercher' && <RechercherView />}
           {currentView === 'réglages' && <RéglagesView />}
+          {currentView === 'likes' && <LikesView />}
+          {currentView === 'Favoris' && <FavorisView />}
+          {currentView === 'vue de profil' && <VueDeProfilView />}
+          {currentView === 'Liste rouges' && <ListeRougesView />}
           {currentView === 'profile' && user && <ProfileView user={user} />}
         </motion.div>
       </AnimatePresence>
