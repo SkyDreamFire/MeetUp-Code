@@ -86,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
 
   {showDropdown && (
     <div className="absolute top-full mt-1 right-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-      {['likes', 'Favoris', 'Vue de profil', 'Liste Rouge'].map((option) => (
+      {['likes', 'favoris', 'vue de profil', 'liste rouge'].map((option) => (
         <button
           key={option}
           onClick={() => onNavigate(option)}
