@@ -19,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
     { id: 'messages', icon: MessageCircle, label: 'Messages' },
     { id: 'profile', icon: User, label: 'Profile' },
     { id: 'settings', icon: Settings, label: 'Settings' },
+    
   ];
 
   return (
