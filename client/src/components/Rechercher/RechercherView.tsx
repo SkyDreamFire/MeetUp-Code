@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sliders, Heart} from 'lucide-react';
+import { UserCard } from '../Enligne/UserCard';
 import { Search, Lock, ChevronDown, Filter, X } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 import { User, SearchFilters } from '../../types';
-import { motion, AnimatePresence } from 'framer-motion';
+
 
 export const RechercherView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('advanced');

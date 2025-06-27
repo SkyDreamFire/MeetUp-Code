@@ -6,7 +6,7 @@ interface UserCardProps {
   User: User;
 }
 
-export const UserCard: React.FC<UserCardProps> = ({ User }) => {
+const UserCard: React.FC<UserCardProps> = ({ User }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* User Image */}
@@ -24,7 +24,7 @@ export const UserCard: React.FC<UserCardProps> = ({ User }) => {
           </div>
         )}
         {/* Verified Badge */}
-        {User.isVerified && (
+        {User.isPremium && (
           <div className="absolute top-3 right-3 bg-blue-500 text-white p-1.5 rounded-full">
             <CheckCircle className="w-4 h-4" />
           </div>

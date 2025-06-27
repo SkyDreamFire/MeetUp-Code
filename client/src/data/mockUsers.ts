@@ -1,13 +1,29 @@
 import { User } from '../types';
-
+export const countries = [
+  'All Countries',
+  'Nigeria',
+  'Ghana',
+  'Kenya',
+  'South Africa',
+  'Morocco',
+  'Egypt',
+  'Tanzania',
+  'Rwanda',
+  'Senegal',
+  'Mali',
+  'Ethiopia',
+  'Uganda',
+  'Zimbabwe',
+  'Botswana',
+  'Namibia'
+];
 export const mockUsers: User[] = [
   {
     id: '2',
-    name: 'Black Codeur',
-    age: 22,
+    name: 'Michael Chen',
+    age: 32,
     bio: 'Software engineer passionate about technology and music. Love hiking and trying new cuisines.',
     location: 'Cape Town, South Africa',
-    profileImage: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150',
     photos: [
       'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=500',
       'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=500',
@@ -22,9 +38,9 @@ export const mockUsers: User[] = [
     gender: 'male',
     occupation: 'Software Engineer',
     education: 'Masters Degree',
-    country: "france",
-  city: "Paris",
-  interest: "chercher une femme entre 23-30",
+    isVerified:true,
+    hasPhoto: true,
+
   },
   {
     id: '3',
