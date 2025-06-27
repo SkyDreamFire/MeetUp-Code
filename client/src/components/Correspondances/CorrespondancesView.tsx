@@ -71,8 +71,8 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-lg overflow-hidden border hover:shadow transition-all duration-300"
-            >
+              className="bg-white rounded-lg overflow-hidden border hover:shadow transition-all duration-300">
+            
               <div className="relative aspect-[3/4]">
                 <img src={match.photos[0]} alt={match.name} className="w-full h-full object-cover" />
                 {match.isOnline && (
