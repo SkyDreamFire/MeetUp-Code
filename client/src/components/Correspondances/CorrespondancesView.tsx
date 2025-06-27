@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Camera, Clock, MoreVertical, Globe, User as UserIcon } from 'lucide-react';
+import { Heart, Camera, Clock, MoreVertical } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
 
@@ -17,27 +17,6 @@ export const CorrespondancesView: React.FC = () => {
 
   return (
     <div className="flex-1 bg-white">
-      <nav className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <img src="/heart.svg" alt="Logo" className="h-8 w-8" />
-              <span className="ml-2 text-xl font-semibold">AfroIntroductions</span>
-            </div>
-            <div className="flex items-center space-x-6">
-              <button className="bg-green-500 text-white px-4 py-2 rounded font-medium hover:bg-green-600 transition-colors">
-                Recevez de Meilleures Correspondances
-              </button>
-              <button className="text-gray-500 hover:text-gray-700">
-                <Globe className="w-6 h-6" />
-              </button>
-              <button className="text-gray-500 hover:text-gray-700">
-                <UserIcon className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
       <div className="border-b">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex space-x-8">
@@ -116,7 +95,7 @@ export const CorrespondancesView: React.FC = () => {
               <div className="p-2 text-sm">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
-                  <span className="font-medium">{match.name}</span>
+                  <h3 className="font-medium">{match.name}</h3>
                   <span className="text-gray-600">{match.age}</span>
                   {match.location && (
                     <span className="text-gray-600 text-xs">• {match.location}</span>
