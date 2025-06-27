@@ -5,7 +5,7 @@ import { User } from '../../types';
 
 export const ListeRougesView: React.FC = () => {
   const [users, setUsers] = useState<User[]>(mockUsers);
-  const [activeTab, setActiveTab] = useState('M’a liké');
+  const [activeTab, setActiveTab] = useState('Liste rouge');
 
   return (
     <div className="flex-1 bg-white p-4 min-h-screen">
@@ -18,7 +18,7 @@ export const ListeRougesView: React.FC = () => {
 
         {/* 🟧 Tabs Onglets */}
         <div className="flex border-b border-gray-300 mb-6 space-x-6 text-sm font-medium text-gray-600">
-          {['M’a liké', 'Mes Likes', 'Likes mutuels'].map((tab) => (
+          {['Liste rouge'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

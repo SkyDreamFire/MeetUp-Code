@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react';
 import { User } from '../../types';
 
 export const FavorisView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('M’a liké');
+  const [activeTab, setActiveTab] = useState('Je suis leur favoris');
   const [users, setUsers] = useState<User[]>([]);
 
   // 👤 Données simulées respectant l'interface User
@@ -95,13 +95,13 @@ export const FavorisView: React.FC = () => {
   // 🔁 Met à jour users selon le tab
   useEffect(() => {
     switch (activeTab) {
-      case 'M’a liké':
+      case 'Je suis leur favoris':
         setUsers(mockLikesMe);
         break;
-      case 'Mes Likes':
+      case 'Mes Favoris':
         setUsers(mockMyLikes);
         break;
-      case 'Likes mutuels':
+      case ' Favoris mutuels':
         setUsers(mockMutualLikes);
         break;
       default:
