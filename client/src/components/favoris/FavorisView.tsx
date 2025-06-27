@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { User } from '../../types';
 
-export const LikesView: React.FC = () => {
+export const FavorisView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('M’a liké');
   const [users, setUsers] = useState<User[]>([]);
 
