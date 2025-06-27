@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
           >
            
             <span className="text-xl font-display font-bold bg-secondary-500 bg-clip-text text-transparent">
-              MeeTup
+              MeetUp
             </span>
           </motion.div>
 
