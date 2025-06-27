@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sliders, Heart} from 'lucide-react';
-import { UserCard } from '../Enligne/UserCard';
 import { Search, Lock, ChevronDown, Filter, X } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 import { User, SearchFilters } from '../../types';
@@ -187,7 +185,7 @@ export const RechercherView: React.FC = () => {
                       <p className="text-sm text-gray-500 mt-1">{search.count} recherches cette semaine</p>
                     </div>
                     <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:from-pink-600 hover:to-purple-700 transition-colors">
-                      Essayer
+                      rechercher
                     </button>
                   </div>
                 </div>
