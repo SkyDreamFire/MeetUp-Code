@@ -19,7 +19,7 @@ import { Heart } from 'lucide-react';
 import { RechercherView } from './components/Rechercher/RechercherView';
 
 type AuthView = 'login' | 'register';
-type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'Favoris'|'vue de profil' | 'Liste rouges';
+type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'favoris'|'vue de profil' | 'liste rouge';
 
 function App() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
@@ -125,9 +125,9 @@ function App() {
           {currentView === 'rechercher' && <RechercherView />}
           {currentView === 'réglages' && <RéglagesView />}
           {currentView === 'likes' && <LikesView />}
-          {currentView === 'Favoris' && <FavorisView />}
+          {currentView === 'favoris' && <FavorisView />}
           {currentView === 'vue de profil' && <VueDeProfilView />}
-          {currentView === 'Liste rouges' && <ListeRougesView />}
+          {currentView === 'liste rouge' && <ListeRougesView />}
           {currentView === 'profile' && user && <ProfileView user={user} />}
         </motion.div>
       </AnimatePresence>

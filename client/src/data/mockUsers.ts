@@ -21,6 +21,9 @@ export const mockUsers: User[] = [
     gender: 'male',
     occupation: 'Software Engineer',
     education: 'Masters Degree',
+    country: "france",
+  city: "Paris",
+  interest: "chercher une femme entre 23-30",
   },
   {
     id: '3',
