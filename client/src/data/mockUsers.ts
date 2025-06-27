@@ -3,8 +3,8 @@ import { User } from '../types';
 export const mockUsers: User[] = [
   {
     id: '2',
-    name: 'Michael Chen',
-    age: 32,
+    name: 'Black Codeur',
+    age: 22,
     bio: 'Software engineer passionate about technology and music. Love hiking and trying new cuisines.',
     location: 'Cape Town, South Africa',
     photos: [
@@ -21,6 +21,9 @@ export const mockUsers: User[] = [
     gender: 'male',
     occupation: 'Software Engineer',
     education: 'Masters Degree',
+    country: "france",
+  city: "Paris",
+  interest: "chercher une femme entre 23-30",
   },
   {
     id: '3',
