@@ -1,5 +1,22 @@
 import { User } from '../types';
-
+export const countries = [
+  'All Countries',
+  'Nigeria',
+  'Ghana',
+  'Kenya',
+  'South Africa',
+  'Morocco',
+  'Egypt',
+  'Tanzania',
+  'Rwanda',
+  'Senegal',
+  'Mali',
+  'Ethiopia',
+  'Uganda',
+  'Zimbabwe',
+  'Botswana',
+  'Namibia'
+];
 export const mockUsers: User[] = [
   {
     id: '2',
@@ -21,6 +38,9 @@ export const mockUsers: User[] = [
     gender: 'male',
     occupation: 'Software Engineer',
     education: 'Masters Degree',
+    isVerified:true,
+    hasPhoto: true,
+
   },
   {
     id: '3',

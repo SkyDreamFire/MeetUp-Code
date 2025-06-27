@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sliders, Heart, X } from 'lucide-react';
-import { UserCard } from './UserCard';
+import { UserCard } from '../Enligne/UserCard';
 import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
 import toast from 'react-hot-toast';

@@ -18,6 +18,8 @@ export interface User {
   country?: string;
   city?: string;
   interest?: string;
+  hasPhoto?: boolean;
+  isVerified?: boolean;
   
 }
 
