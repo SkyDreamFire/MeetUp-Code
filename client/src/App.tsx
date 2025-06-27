@@ -7,7 +7,6 @@ import { useAuth } from './hooks/useAuth';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { Header } from './components/layout/Header';
-import { EnligneView } from './components/Enligne/EnligneView';
 import { VueDeProfilView } from './components/vueDeProfil/VueDeProfilView';
 import { CorrespondancesView } from './components/Correspondances/CorrespondancesView';
 import { MessagesView } from './components/messages/MessagesView';
@@ -19,6 +18,7 @@ import { FavorisView } from './components/favoris/FavorisView';
 import { ListeRougesView } from './components/ListeRouge/ListeRougesView';
 import { Heart } from 'lucide-react';
 import { RechercherView } from './components/Rechercher/RechercherView';
+import { EnligneView } from './components/Enligne/Enligne.tsx';
 
 type AuthView = 'login' | 'register';
 type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'favoris'|'vue de profil' | 'liste rouge';

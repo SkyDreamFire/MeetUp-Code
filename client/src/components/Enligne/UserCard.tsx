@@ -1,17 +1,22 @@
 import React from 'react';
+<<<<<<< HEAD
+import { Heart, MessageCircle, Star, MapPin, Clock, CheckCircle } from 'lucide-react';
+=======
 import { motion } from 'framer-motion';
 import { Heart, X, MapPin, Briefcase, GraduationCap, Crown, MessageCircle } from 'lucide-react';
 import PopUpMessage from '../shared/PopUpMessage';
 import MessageList from '../shared/MessageList';
 import { useConversationsContext } from '../../contexts/ConversationsContext';
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
 import { User } from '../../types';
 
 interface UserCardProps {
-  user: User;
-  onLike: (userId: string) => void;
-  onPass: (userId: string) => void;
+  User: User;
 }
 
+<<<<<<< HEAD
+export const UserCard: React.FC<UserCardProps> = ({ User }) => {
+=======
 export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
   const {
     conversations,
@@ -22,89 +27,71 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
     closeList,
     closeConversation
   } = useConversationsContext();
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      className="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-w-sm mx-auto"
-    >
-      {/* Main Photo */}
-      <div className="relative h-96">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      {/* User Image */}
+      <div className="relative">
         <img
-          src={user.photos[0]}
-          alt={user.name}
-          className="w-full h-full object-cover"
+          src={User.photos[0]}
+          alt={User.name}
+          className="w-full h-64 object-cover"
         />
-        
-        {/* Premium Badge */}
-        {user.isPremium && (
-          <div className="absolute top-4 right-4 bg-gradient-sunset px-2 py-1 rounded-full flex items-center space-x-1">
-            <Crown className="w-4 h-4 text-white" />
-            <span className="text-white text-xs font-medium">Premium</span>
+        {/* Online Status */}
+        {User.isOnline && (
+          <div className="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+            En ligne
           </div>
         )}
-
-        {/* Online Status */}
-        <div className="absolute top-4 left-4">
-          <div className={`w-3 h-3 rounded-full ${user.isOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
-            {user.isOnline && (
-              <div className="w-3 h-3 rounded-full bg-green-500 animate-ping"></div>
-            )}
+        {/* Verified Badge */}
+        {User.isVerified && (
+          <div className="absolute top-3 right-3 bg-blue-500 text-white p-1.5 rounded-full">
+            <CheckCircle className="w-4 h-4" />
           </div>
-        </div>
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        )}
       </div>
 
       {/* User Info */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+      <div className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-2xl font-bold">{user.name}</h3>
-          <span className="text-lg font-medium">{user.age}</span>
-        </div>
-        
-        <div className="flex items-center space-x-1 mb-2">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm">{user.location}</span>
+          <h3 className="text-lg font-semibold text-gray-900">
+            {User.name}, {User.age}
+          </h3>
         </div>
 
-        {user.occupation && (
-          <div className="flex items-center space-x-1 mb-2">
-            <Briefcase className="w-4 h-4" />
-            <span className="text-sm">{user.occupation}</span>
-          </div>
-        )}
+        <div className="flex items-center text-gray-600 mb-2">
+          <MapPin className="w-4 h-4 mr-1" />
+          <span className="text-sm">{User.city}, {User.country}</span>
+        </div>
 
-        {user.education && (
-          <div className="flex items-center space-x-1 mb-3">
-            <GraduationCap className="w-4 h-4" />
-            <span className="text-sm">{user.education}</span>
-          </div>
-        )}
+        <div className="flex items-center text-gray-500 mb-3">
+          <Clock className="w-4 h-4 mr-1" />
+          <span className="text-sm">{User.isOnline}</span>
+        </div>
 
-        <p className="text-sm opacity-90 line-clamp-2">{user.bio}</p>
+        <p className="text-gray-700 text-sm mb-4 line-clamp-3">
+          {User.interests}
+        </p>
 
-        {/* Interests */}
-        {user.interests.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-3">
-            {user.interests.slice(0, 3).map((interest, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs"
-              >
-                {interest}
-              </span>
-            ))}
-            {user.interests.length > 3 && (
-              <span className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs">
-                +{user.interests.length - 3} more
-              </span>
-            )}
-          </div>
-        )}
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 px-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-1">
+            <MessageCircle className="w-4 h-4" />
+            Message
+          </button>
+          <button className="flex-1 bg-pink-500 hover:bg-pink-600 text-white py-2 px-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-1">
+            <Star className="w-4 h-4" />
+            Intérêt
+          </button>
+          <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-lg transition-colors duration-200">
+            <Heart className="w-4 h-4" />
+          </button>
+        </div>
       </div>
+<<<<<<< HEAD
+    </div>
+=======
 
       {/* Action Buttons */}
       <div className="absolute bottom-6 right-6 flex space-x-3">
@@ -159,5 +146,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
         )}
       </div>
     </motion.div>
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
   );
 };
+
+export default UserCard;

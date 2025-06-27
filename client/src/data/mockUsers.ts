@@ -1,5 +1,22 @@
 import { User } from '../types';
-
+export const countries = [
+  'All Countries',
+  'Nigeria',
+  'Ghana',
+  'Kenya',
+  'South Africa',
+  'Morocco',
+  'Egypt',
+  'Tanzania',
+  'Rwanda',
+  'Senegal',
+  'Mali',
+  'Ethiopia',
+  'Uganda',
+  'Zimbabwe',
+  'Botswana',
+  'Namibia'
+];
 export const mockUsers: User[] = [
   {
     id: '2',
@@ -22,9 +39,15 @@ export const mockUsers: User[] = [
     gender: 'male',
     occupation: 'Software Engineer',
     education: 'Masters Degree',
+<<<<<<< HEAD
+    isVerified:true,
+    hasPhoto: true,
+
+=======
     country: "france",
   city: "Paris",
   interest: "chercher une femme entre 23-30",
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
   },
   {
     id: '3',

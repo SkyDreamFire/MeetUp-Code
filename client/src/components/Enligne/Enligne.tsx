@@ -5,6 +5,7 @@ import { UserCard } from './UserCard';
 import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
 import toast from 'react-hot-toast';
+import SearchResults from './SearchResults';
 
 export const EnligneView: React.FC = () => {
   const [users, setUsers] = useState<User[]>(mockUsers);
@@ -14,7 +15,7 @@ export const EnligneView: React.FC = () => {
   const currentUser = users[currentIndex];
 
   const handleLike = (userId: string) => {
-    toast.success('Liked! ❤️');
+    toast.success('Liked! ❤');
     nextUser();
   };
 
@@ -122,66 +123,17 @@ export const EnligneView: React.FC = () => {
               </div>
             </motion.div>
           )}
+          
         </AnimatePresence>
+      
 
-        {/* Main Content */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* User Card */}
-          <div className="flex-1 flex justify-center">
-            <AnimatePresence mode="wait">
-              <UserCard
-                key={currentUser.id}
-                user={currentUser}
-                onLike={handleLike}
-                onPass={handlePass}
-              />
-            </AnimatePresence>
-          </div>
-
-          {/* Actions Panel */}
-          <div className="lg:w-80">
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-              
-              <div className="space-y-4">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handlePass(currentUser.id)}
-                  className="w-full flex items-center justify-center space-x-3 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200"
-                >
-                  <X className="w-5 h-5 text-gray-600" />
-                  <span className="font-medium text-gray-700">Pass</span>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleLike(currentUser.id)}
-                  className="w-full flex items-center justify-center space-x-3 py-3 bg-gradient-romantic text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                >
-                  <Heart className="w-5 h-5" />
-                  <span className="font-medium">Like</span>
-                </motion.button>
-              </div>
-
-              {/* Stats */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-primary-500">{users.length - currentIndex}</div>
-                    <div className="text-sm text-gray-600">Profiles left</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-secondary-500">{currentIndex}</div>
-                    <div className="text-sm text-gray-600">Profiles viewed</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        {/* Main Content */
+        <SearchResults />
+        }
+    
+        
     </div>
+    </div>
+    
   );
 };
