@@ -20,11 +20,10 @@ export const countries = [
 export const mockUsers: User[] = [
   {
     id: '2',
-    name: 'Black Codeur',
-    age: 22,
+    name: 'Michael Chen',
+    age: 32,
     bio: 'Software engineer passionate about technology and music. Love hiking and trying new cuisines.',
     location: 'Cape Town, South Africa',
-    profileImage: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150',
     photos: [
       'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=500',
       'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=500',
@@ -39,15 +38,9 @@ export const mockUsers: User[] = [
     gender: 'male',
     occupation: 'Software Engineer',
     education: 'Masters Degree',
-<<<<<<< HEAD
     isVerified:true,
     hasPhoto: true,
 
-=======
-    country: "france",
-  city: "Paris",
-  interest: "chercher une femme entre 23-30",
->>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
   },
   {
     id: '3',
