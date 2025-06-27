@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, X, MapPin, Briefcase, GraduationCap, Crown } from 'lucide-react';
+import { Heart, X, MapPin, Briefcase, GraduationCap, Crown, MessageCircle } from 'lucide-react';
+import PopUpMessage from '../shared/PopUpMessage';
+import MessageList from '../shared/MessageList';
+import { useConversationsContext } from '../../contexts/ConversationsContext';
 import { User } from '../../types';
 
 interface UserCardProps {
@@ -10,6 +13,15 @@ interface UserCardProps {
 }
 
 export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
+  const {
+    conversations,
+    isListOpen,
+    selectedConversation,
+    addConversation,
+    selectConversation,
+    closeList,
+    closeConversation
+  } = useConversationsContext();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -98,6 +110,13 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
       <div className="absolute bottom-6 right-6 flex space-x-3">
         <motion.button
           whileHover={{ scale: 1.1 }}
+          className="p-3 bg-blue-500 rounded-full text-white shadow-lg"
+          onClick={() => addConversation(user)}
+        >
+          <MessageCircle className="w-6 h-6" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => onPass(user.id)}
           className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white border border-white/30 hover:bg-white/30 transition-all duration-200"
@@ -113,6 +132,31 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
         >
           <Heart className="w-6 h-6" />
         </motion.button>
+      </div>
+
+      {/* Message List and Popup Container */}
+      <div className="fixed bottom-0 right-0 flex items-end space-x-4 z-50">
+        {/* Message List */}
+        {isListOpen && (
+          <MessageList
+            conversations={conversations}
+            onSelect={selectConversation}
+            onClose={closeList}
+          />
+        )}
+
+        {/* Message Popup */}
+        {selectedConversation && (
+          <PopUpMessage
+            isOpen={true}
+            onClose={closeConversation}
+            recipientName={selectedConversation.name}
+            recipientAge={selectedConversation.age}
+            recipientPhoto={selectedConversation.avatar}
+            recipientLocation={selectedConversation.location || 'Non spécifié'}
+            isOnline={selectedConversation.isOnline || false}
+          />
+        )}
       </div>
     </motion.div>
   );

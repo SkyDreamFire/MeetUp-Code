@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ConversationsProvider } from './contexts/ConversationsContext';
 import { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from './hooks/useAuth';
@@ -22,6 +23,14 @@ type AuthView = 'login' | 'register';
 type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'favoris'|'vue de profil' | 'liste rouge';
 
 function App() {
+  return (
+    <ConversationsProvider>
+      <AppContent />
+    </ConversationsProvider>
+  );
+}
+
+function AppContent() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
   const [authView, setAuthView] = useState<AuthView>('login');
   const [currentView, setCurrentView] = useState<AppView>('En ligne');
