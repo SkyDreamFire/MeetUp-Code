@@ -13,8 +13,8 @@ export const BillingSettings: React.FC = () => {
       current: true
     },
     {
-      name: 'Premium',
-      price: '19.99€',
+      Nom : 'Premium',
+      Prix: '19.99€',
       features: [
         'Likes illimités',
         'Messages illimités',
