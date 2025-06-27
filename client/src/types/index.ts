@@ -44,10 +44,24 @@ export interface AuthState {
 }
 
 export interface SearchFilters {
-  ageRange: [number, number];
-  location?: string;
-  interests?: string[];
-  lookingFor?: string;
-  gender?: 'male' | 'female' | 'other';
-  isPremium?: boolean;
+  gender: string;
+  seeking: string;
+  ageFrom: string;
+  ageTo: string;
+  connection: string;
+  sortBy: string;
+  withPhoto: boolean;
+  verifiedOnly: boolean;
+  subscribeNow: boolean;
+  country: string;
+  state: string;
+  city: string;
+  distance: string;
+  relationshipType: {
+    noPreference: boolean;
+    penPal: boolean;
+    friendship: boolean;
+    romance: boolean;
+    longTerm: boolean;
+  };
 }
