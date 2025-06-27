@@ -22,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
     { id: 'rechercher', label: 'Rechercher' },
     { id: 'messages',  label: 'Messages' },
   
-    { id: 'profile',  label: 'Profil' },
+   
     
     
   ];
@@ -31,19 +31,19 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50"
+      className="bg-pink-300 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+         <img src="/logo_final-removebg-preview.png" alt="Logo" className=" h-10 w-15 rounded-full bg-white" />
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="flex items-center space-x-2 cursor-pointer"
-            onClick={() => onNavigate('Search')}
+            onClick={() => onNavigate('rechercher')}
           >
            
-            <span className="text-xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent">
-              MeeTup
+            <span className="text-xl font-display font-bold bg-secondary-500 bg-clip-text text-transparent">
+              MeetUp
             </span>
           </motion.div>
 
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                   currentView === item.id
                     ? 'bg-primary-500 text-white shadow-lg'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-white hover:bg-secondary-500'
                 }`}
               >
                 
@@ -72,13 +72,13 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
 >
   <motion.button
     key="activités"
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
+    whileHover={{ scale: 1.2 }}
+    whileTap={{ scale: 1 }}
     
-    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 ${
       currentView === 'activités'
-        ? 'bg-primary-500 text-white shadow-lg'
-        : 'text-gray-600 hover:bg-gray-100'
+       ? 'bg-primary-500 text-white shadow-lg'
+                    : 'text-white hover:bg-secondary-500'
     }`}
   >
     <span className="font-medium">Activités</span>
@@ -148,8 +148,8 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
                 onClick={() => onNavigate(item.id)}
                 className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all duration-200 ${
                   currentView === item.id
-                    ? 'text-primary-500'
-                    : 'text-gray-600'
+                    ? 'text-secondary-500'
+                    : 'text-white'
                 }`}
               >
                 

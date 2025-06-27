@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ConversationsProvider } from './contexts/ConversationsContext';
 import { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from './hooks/useAuth';
@@ -19,9 +20,17 @@ import { RechercherView } from './components/Rechercher/RechercherView';
 import { EnligneView } from './components/Enligne/Enligne.tsx';
 
 type AuthView = 'login' | 'register';
-type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'Favoris'|'vue de profil' | 'Liste rouges';
+type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'favoris'|'vue de profil' | 'liste rouge';
 
 function App() {
+  return (
+    <ConversationsProvider>
+      <AppContent />
+    </ConversationsProvider>
+  );
+}
+
+function AppContent() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
   const [authView, setAuthView] = useState<AuthView>('login');
   const [currentView, setCurrentView] = useState<AppView>('En ligne');
@@ -36,7 +45,8 @@ function App() {
           className="text-center"
         >
           <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-            <Heart className="w-10 h-10 text-primary-500 animate-pulse" />
+            {/* <Heart className="w-10 h-10 text-primary-500 animate-pulse" /> */}
+            <img src="/logo_final-removebg-preview.png" alt=""  className="w-10 h-10 text-primary-500 animate-pulse"/>
           </div>
           <h1 className="text-2xl font-display font-bold text-white mb-2">
             MeeTup
@@ -125,9 +135,9 @@ function App() {
           {currentView === 'rechercher' && <RechercherView />}
           {currentView === 'réglages' && <RéglagesView />}
           {currentView === 'likes' && <LikesView />}
-          {currentView === 'Favoris' && <FavorisView />}
+          {currentView === 'favoris' && <FavorisView />}
           {currentView === 'vue de profil' && <VueDeProfilView />}
-          {currentView === 'Liste rouges' && <ListeRougesView />}
+          {currentView === 'liste rouge' && <ListeRougesView />}
           {currentView === 'profile' && user && <ProfileView user={user} />}
         </motion.div>
       </AnimatePresence>

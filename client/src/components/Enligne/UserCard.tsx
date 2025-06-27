@@ -1,12 +1,33 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Heart, MessageCircle, Star, MapPin, Clock, CheckCircle } from 'lucide-react';
+=======
+import { motion } from 'framer-motion';
+import { Heart, X, MapPin, Briefcase, GraduationCap, Crown, MessageCircle } from 'lucide-react';
+import PopUpMessage from '../shared/PopUpMessage';
+import MessageList from '../shared/MessageList';
+import { useConversationsContext } from '../../contexts/ConversationsContext';
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
 import { User } from '../../types';
 
 interface UserCardProps {
   User: User;
 }
 
+<<<<<<< HEAD
 export const UserCard: React.FC<UserCardProps> = ({ User }) => {
+=======
+export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
+  const {
+    conversations,
+    isListOpen,
+    selectedConversation,
+    addConversation,
+    selectConversation,
+    closeList,
+    closeConversation
+  } = useConversationsContext();
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* User Image */}
@@ -68,7 +89,64 @@ export const UserCard: React.FC<UserCardProps> = ({ User }) => {
           </button>
         </div>
       </div>
+<<<<<<< HEAD
     </div>
+=======
+
+      {/* Action Buttons */}
+      <div className="absolute bottom-6 right-6 flex space-x-3">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          className="p-3 bg-blue-500 rounded-full text-white shadow-lg"
+          onClick={() => addConversation(user)}
+        >
+          <MessageCircle className="w-6 h-6" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => onPass(user.id)}
+          className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white border border-white/30 hover:bg-white/30 transition-all duration-200"
+        >
+          <X className="w-6 h-6" />
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => onLike(user.id)}
+          className="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-primary-600 transition-all duration-200"
+        >
+          <Heart className="w-6 h-6" />
+        </motion.button>
+      </div>
+
+      {/* Message List and Popup Container */}
+      <div className="fixed bottom-0 right-0 flex items-end space-x-4 z-50">
+        {/* Message List */}
+        {isListOpen && (
+          <MessageList
+            conversations={conversations}
+            onSelect={selectConversation}
+            onClose={closeList}
+          />
+        )}
+
+        {/* Message Popup */}
+        {selectedConversation && (
+          <PopUpMessage
+            isOpen={true}
+            onClose={closeConversation}
+            recipientName={selectedConversation.name}
+            recipientAge={selectedConversation.age}
+            recipientPhoto={selectedConversation.avatar}
+            recipientLocation={selectedConversation.location || 'Non spécifié'}
+            isOnline={selectedConversation.isOnline || false}
+          />
+        )}
+      </div>
+    </motion.div>
+>>>>>>> bdc5fac6c208b0df3547b419c3940e0ac4dad065
   );
 };
 
