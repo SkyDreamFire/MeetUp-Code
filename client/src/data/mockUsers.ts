@@ -127,4 +127,6 @@ export const mockUsers: User[] = [
     education: 'Fashion Degree',
     lastActive: 0
   },
+
+  
 ];
