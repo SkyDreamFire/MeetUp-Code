@@ -134,24 +134,30 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onLike, onPass }) => {
         </motion.button>
       </div>
 
-      {/* Message List */}
-      {isListOpen && (
-        <MessageList
-          conversations={conversations}
-          onSelect={selectConversation}
-          onClose={closeList}
-        />
-      )}
+      {/* Message List and Popup Container */}
+      <div className="fixed bottom-0 right-0 flex items-end space-x-4 z-50">
+        {/* Message List */}
+        {isListOpen && (
+          <MessageList
+            conversations={conversations}
+            onSelect={selectConversation}
+            onClose={closeList}
+          />
+        )}
 
-      {/* Message Popup */}
-      {selectedConversation && (
-        <PopUpMessage
-          isOpen={true}
-          onClose={closeConversation}
-          recipientName={selectedConversation.name}
-          recipientAge={selectedConversation.age}
-        />
-      )}
+        {/* Message Popup */}
+        {selectedConversation && (
+          <PopUpMessage
+            isOpen={true}
+            onClose={closeConversation}
+            recipientName={selectedConversation.name}
+            recipientAge={selectedConversation.age}
+            recipientPhoto={selectedConversation.avatar}
+            recipientLocation={selectedConversation.location || 'Non spécifié'}
+            isOnline={selectedConversation.isOnline || false}
+          />
+        )}
+      </div>
     </motion.div>
   );
 };

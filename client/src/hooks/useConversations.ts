@@ -5,6 +5,8 @@ interface Conversation {
   name: string;
   age: number;
   avatar: string;
+  location: string;
+  isOnline: boolean;
 }
 
 export const useConversations = () => {
@@ -19,7 +21,9 @@ export const useConversations = () => {
         id: user.id,
         name: user.name,
         age: user.age,
-        avatar: user.photos[0]
+        avatar: user.photos[0],
+        location: user.location || 'Non spécifié',
+        isOnline: user.isOnline || false
       };
       setConversations(prev => [...prev, newConversation]);
     }
