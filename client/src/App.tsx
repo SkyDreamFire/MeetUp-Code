@@ -36,7 +36,8 @@ function App() {
           className="text-center"
         >
           <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-            <Heart className="w-10 h-10 text-primary-500 animate-pulse" />
+            {/* <Heart className="w-10 h-10 text-primary-500 animate-pulse" /> */}
+            <img src="/logo_final-removebg-preview.png" alt=""  className="w-10 h-10 text-primary-500 animate-pulse"/>
           </div>
           <h1 className="text-2xl font-display font-bold text-white mb-2">
             MeeTup
