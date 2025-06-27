@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Camera, Clock, MoreVertical } from 'lucide-react';
+import { Heart, X } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
 
@@ -8,6 +8,8 @@ export const CorrespondancesView: React.FC = () => {
   const [matches] = useState<User[]>(mockUsers);
   const [sortBy, setSortBy] = useState<string>('Pertinence');
   const [activeTab, setActiveTab] = useState<string>('Mes Correspondances');
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showPhotos, setShowPhotos] = useState(false);
 
   const tabs = [
     { id: 'mes-correspondances', label: 'Mes Correspondances' },
@@ -92,34 +94,59 @@ export const CorrespondancesView: React.FC = () => {
               </div>
 
               {/* User Info */}
-              <div className="p-2 text-sm">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-2">
-                  <h3 className="font-medium">{match.name}</h3>
-                  <span className="text-gray-600">{match.age}</span>
-                  {match.location && (
-                    <span className="text-gray-600 text-xs">• {match.location}</span>
-                  )}
-</div>
-                  <button className="text-gray-500 hover:text-gray-700">
-                    <MoreVertical className="w-4 h-4" />
-                  </button>
-                </div>
-                
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Camera className="w-3 h-3" />
-                    <span>{match.photos.length}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span>Il y a {(match as User & { lastActive?: number })?.lastActive || 0} minutes</span>
-                  </div>
-                </div>
+              {/* 📋 Infos */}
+              <h3 className="text-center text-lg font-semibold text-gray-800">{match.name}</h3>
+              <p className="text-center text-sm text-gray-600">{match.age} • {match.city}, {match.country}</p>
+              <p className="text-center text-sm text-gray-500 mt-1">Cherchant: {match.interest}</p>
+              <p className="text-center text-xs text-gray-400">Reçu: Il y a 3 heures</p>
+
+              {/* ❤️ Actions */}
+              <div className="mt-4 flex justify-center space-x-4 text-gray-500 text-sm">
+                <button className="hover:text-red-500"><Heart className="w-4 h-4" /></button>
+                <button className="hover:text-yellow-500"><span>💌</span></button>
+                <button 
+                  className="hover:text-gray-600"
+                  onClick={() => {
+                    setSelectedUser(match);
+                    setShowPhotos(true);
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 5h13a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H4zm3.5 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0-1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm8.5-3h2v2h-2V9zm-3 6l-2-2-3 3h10l-3-3-2 2z" />
+                  </svg>
+                </button>
               </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Photos Modal */}
+        {showPhotos && selectedUser && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-4xl w-full mx-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">Photos de {selectedUser.name}</h2>
+                <button 
+                  onClick={() => setShowPhotos(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {selectedUser.photos.map((photo, index) => (
+                  <div key={index} className="aspect-square overflow-hidden rounded-lg">
+                    <img 
+                      src={photo} 
+                      alt={`Photo ${index + 1} de ${selectedUser.name}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Empty State */}
         {matches.length === 0 && (
