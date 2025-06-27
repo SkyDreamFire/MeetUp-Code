@@ -14,16 +14,14 @@ import { ProfileView } from './components/profile/ProfileView';
 import { RéglagesView } from './components/Réglages/RéglagesView';
 import { LikesView } from './components/likes/LikesView';
 import { FavorisView } from './components/favoris/FavorisView';
+
 import { ListeRougesView } from './components/ListeRouge/ListeRougesView';
+import { Heart } from 'lucide-react';
 import { RechercherView } from './components/Rechercher/RechercherView';
-<<<<<<< Updated upstream
 import { EnligneView } from './components/Enligne/Enligne.tsx';
-=======
-import { User } from './types';
->>>>>>> Stashed changes
 
 type AuthView = 'login' | 'register';
-type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' | 'favoris'|'vue de profil' | 'liste rouge';
+type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activités' | 'rechercher' | 'réglages'| 'likes' |   'favoris'|'vue de profil' | 'liste rouge';
 
 function App() {
   return (
@@ -39,7 +37,6 @@ function AppContent() {
   const { user, isAuthenticated, isLoading, login, register } = useAuth();
   const [authView, setAuthView] = useState<AuthView>('login');
   const [currentView, setCurrentView] = useState<AppView>('En ligne');
-  const [selectedMessageUser, setSelectedMessageUser] = useState<User | null>(null);
 
   // Loading screen
   if (isLoading) {
@@ -51,6 +48,7 @@ function AppContent() {
           className="text-center"
         >
           <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            {/* <Heart className="w-10 h-10 text-primary-500 animate-pulse" /> */}
             <img src="/logo_final-removebg-preview.png" alt=""  className="w-10 h-10 text-primary-500 animate-pulse"/>
           </div>
           <h1 className="text-2xl font-display font-bold text-white mb-2">
@@ -120,12 +118,7 @@ function AppContent() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header
         currentUser={user || { name: '', photos: [], isPremium: false }}
-        onNavigate={(view: string) => {
-          setCurrentView(view as AppView);
-          if (view !== 'messages') {
-            setSelectedMessageUser(null);
-          }
-        }}
+        onNavigate={(view: string) => setCurrentView(view as AppView)}
         currentView={currentView}
       />
       
@@ -139,15 +132,9 @@ function AppContent() {
           className="flex-1 flex flex-col"
         >
           {currentView === 'En ligne' && <EnligneView />}
-          {currentView === 'correspondances' && (
-            <CorrespondancesView 
-              onMessageUser={(user) => {
-                setSelectedMessageUser(user);
-                setCurrentView('messages');
-              }} 
-            />
-          )}
-          {currentView === 'messages' && <MessagesView Users={selectedMessageUser} />}
+          {currentView === 'correspondances' && <CorrespondancesView />}
+          {currentView === 'messages' && <MessagesView />}
+        
           {currentView === 'rechercher' && <RechercherView />}
           {currentView === 'réglages' && <RéglagesView />}
           {currentView === 'likes' && <LikesView />}
