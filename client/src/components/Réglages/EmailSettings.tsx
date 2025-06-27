@@ -25,6 +25,12 @@ export const EmailSettings: React.FC = () => {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
         </div>
+        <label htmlFor='passWord' className='block text-sm font-medium text-gray-700 mb-1'> Mot de Passe</label>
+        <input 
+        type="passWord"
+        id="password"
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+        />
         <button
           type="submit"
           className="w-full bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition-colors"
