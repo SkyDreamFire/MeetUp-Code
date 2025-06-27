@@ -193,9 +193,11 @@ export const RechercherView: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3 mb-4">
                       <div className="relative">
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                          {user.name.charAt(0)}
-                        </div>
+                        <img
+                          src={user.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                          alt={`Photo de profil de ${user.name}`}
+                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
+                        />
                         {user.isOnline && (
                           <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
                         )}

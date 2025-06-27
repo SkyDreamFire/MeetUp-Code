@@ -7,6 +7,7 @@ export const mockUsers: User[] = [
     age: 22,
     bio: 'Software engineer passionate about technology and music. Love hiking and trying new cuisines.',
     location: 'Cape Town, South Africa',
+    profileImage: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150',
     photos: [
       'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=500',
       'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=500',

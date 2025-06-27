@@ -5,6 +5,7 @@ export interface User {
   bio: string;
   location: string;
   photos: string[];
+  profileImage?: string;
   isPremium: boolean;
   isOnline: boolean;
   lastSeen?: Date;
