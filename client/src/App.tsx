@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ConversationsProvider } from './contexts/ConversationsContext';
 import { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
@@ -24,9 +25,11 @@ type AppView = 'En ligne' | 'correspondances' | 'messages' | 'profile' | 'activi
 
 function App() {
   return (
-    <ConversationsProvider>
-      <AppContent />
-    </ConversationsProvider>
+    <Router>
+      <ConversationsProvider>
+        <AppContent />
+      </ConversationsProvider>
+    </Router>
   );
 }
 
