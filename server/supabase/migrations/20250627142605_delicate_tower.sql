@@ -1,4 +1,4 @@
--- Base de données AfroIntroductions
+
 -- Création de la base de données et des tables
 
 CREATE DATABASE IF NOT EXISTS afro_dating CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
