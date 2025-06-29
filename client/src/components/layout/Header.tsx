@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
 
             <div
            
-              onClick={() => onNavigate('réglages')}
+            
             >
               <RéglagesView/>
 

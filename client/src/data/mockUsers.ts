@@ -20,6 +20,7 @@ export const countries = [
 export const mockUsers: User[] = [
   {
     id: '2',
+    email:"",
     name: 'Michael Chen',
     age: 32,
     bio: 'Software engineer passionate about technology and music. Love hiking and trying new cuisines.',
@@ -44,6 +45,7 @@ export const mockUsers: User[] = [
   },
   {
     id: '3',
+    email:"",
     name: 'Amina Hassan',
     age: 26,
     bio: 'Doctor who loves helping people. Enjoy dancing, traveling, and spending time with family.',
@@ -66,6 +68,7 @@ export const mockUsers: User[] = [
     id: '4',
     name: 'David Okonkwo',
     age: 29,
+    email:"",
     bio: 'Entrepreneur building tech solutions for Africa. Love sports, reading, and meeting new people.',
     location: 'Nairobi, Kenya',
     photos: [
@@ -87,6 +90,7 @@ export const mockUsers: User[] = [
     id: '5',
     name: 'Fatima Al-Rashid',
     age: 25,
+    email:"",
     bio: 'Artist and designer who loves creating beautiful things. Passionate about culture and languages.',
     location: 'Marrakech, Morocco',
     photos: [
@@ -107,6 +111,7 @@ export const mockUsers: User[] = [
     id: '6',
     name: 'James Thompson',
     age: 34,
+    email:"",
     bio: 'Investment banker who enjoys traveling the world. Love fitness, wine tasting, and good conversations.',
     location: 'Johannesburg, South Africa',
     photos: [
@@ -128,6 +133,7 @@ export const mockUsers: User[] = [
     id: '7',
     name: 'Zara Okafor',
     age: 27,
+    email:"",
     bio: 'Fashion designer passionate about African culture and style. Love photography and music festivals.',
     location: 'Lagos, Nigeria',
     photos: [

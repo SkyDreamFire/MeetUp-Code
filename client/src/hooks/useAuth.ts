@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import { AuthState, User } from '../types';
+import { AuthState } from '../types';
 
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>({
@@ -26,6 +26,8 @@ export const useAuth = () => {
             email: user.email!,
             photos: [],
             isPremium: false,
+           lastActive:0,
+
             isOnline: true,
             bio: '',
             age: 0,

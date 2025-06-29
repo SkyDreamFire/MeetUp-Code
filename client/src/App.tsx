@@ -22,7 +22,7 @@ import { EnligneView } from './components/Enligne/Enligne';
 import { LogoutHandler } from './components/Réglages/LogoutHandler';
 // Page components
 import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
+// import Dashboard from './pages/Dashboard';
 import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
 

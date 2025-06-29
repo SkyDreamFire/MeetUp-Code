@@ -2,6 +2,7 @@ export interface User {
   id: string;
   name: string;
   age: number;
+  email:string;
   bio: string;
   location: string;
   photos: string[];
@@ -13,7 +14,7 @@ export interface User {
   isNew?: boolean;
   interests: string[];
   lookingFor: string;
-  gender: 'male' | 'female' | 'other';
+  gender: 'male' | 'female' | "";
   occupation?: string;
   education?: string;
   country?: string;
