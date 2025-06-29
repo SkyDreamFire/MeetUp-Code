@@ -4,6 +4,7 @@ import {   Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 
+
 interface HeaderProps {
   currentUser?: {
     isPremium?: boolean;
@@ -39,12 +40,14 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="flex items-center space-x-2 cursor-pointer"
-            onClick={() => onNavigate('rechercher')}
-          >
            
-            <span className="text-xl font-display font-bold bg-secondary-500 bg-clip-text text-transparent">
+          >
+         
+            <span onClick={ () => onNavigate('dashboard')} className="text-xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent">
               MeetUp
             </span>
+    
+          
           </motion.div>
 
           {/* Desktop Navigation */}

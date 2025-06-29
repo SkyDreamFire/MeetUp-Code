@@ -22,9 +22,10 @@ import { EnligneView } from './components/Enligne/Enligne';
 import { LogoutHandler } from './components/Réglages/LogoutHandler';
 // Page components
 import LandingPage from './pages/LandingPage';
-// import Dashboard from './pages/Dashboard';
+
 import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
+import Dashboard from './pages/Dashboard';
 
 // Route protégée
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -73,13 +74,14 @@ type ViewType =
   | 'réglages'
   | 'likes'
   | 'favoris'
+  |'dashboard'
   | 'vue de profil'
   | 'liste rouge';
 
 // App interne après connexion
 function InternalApp() {
   const { user, loading } = useAuth();
-  const [currentView, setCurrentView] = useState<ViewType>('En ligne');
+  const [currentView, setCurrentView] = useState<ViewType>('dashboard');
 
   if (loading) {
     return (
@@ -109,6 +111,7 @@ function InternalApp() {
       case 'correspondances': return <CorrespondancesView />;
       case 'messages': return <MessagesView />;
       case 'rechercher': return <RechercherView />;
+      case 'dashboard': return <Dashboard />;
       
       case 'likes': return <LikesView />;
       case 'favoris': return <FavorisView />;
