@@ -13,7 +13,7 @@ import { VueDeProfilView } from './components/vueDeProfil/VueDeProfilView';
 import { CorrespondancesView } from './components/Correspondances/CorrespondancesView';
 import { MessagesView } from './components/messages/MessagesView';
 import { ProfileView } from './components/profile/ProfileView';
-import { RéglagesView } from './components/Réglages/RéglagesView';
+
 import { LikesView } from './components/likes/LikesView';
 import { FavorisView } from './components/favoris/FavorisView';
 import { ListeRougesView } from './components/ListeRouge/ListeRougesView';
@@ -109,7 +109,7 @@ function InternalApp() {
       case 'correspondances': return <CorrespondancesView />;
       case 'messages': return <MessagesView />;
       case 'rechercher': return <RechercherView />;
-      case 'réglages': return <RéglagesView />;
+      
       case 'likes': return <LikesView />;
       case 'favoris': return <FavorisView />;
       case 'vue de profil': return <VueDeProfilView />;

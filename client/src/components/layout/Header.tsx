@@ -1,6 +1,6 @@
 import React , { useState }from 'react';
-
-import {  Settings, Crown } from 'lucide-react';
+import { RéglagesView } from '../Réglages/RéglagesView';
+import {   Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 
@@ -116,15 +116,13 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onNavigate, current
             
          
 
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            <div
+           
               onClick={() => onNavigate('réglages')}
             >
-              <Settings className="w-5 h-5" />
+              <RéglagesView/>
 
-            </motion.button>
+            </div>
 
             {currentUser?.photos && currentUser.photos[0] && (
               <motion.img

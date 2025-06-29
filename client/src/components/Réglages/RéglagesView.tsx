@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { Settings, Mail, Lock, User, CreditCard, Languages, HelpCircle, UserPlus, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  Settings,
+  Mail,
+  Lock,
+  User,
+  CreditCard,
+  Languages,
+  HelpCircle,
+  UserPlus,
+  LogOut,
+} from 'lucide-react';
 import { SettingsRouter } from './SettingsRouter';
 
 export const RéglagesView: React.FC = () => {
@@ -18,9 +28,9 @@ export const RéglagesView: React.FC = () => {
   ];
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-rose-50 to-pink-50 p-4 relative">
+    <div className="flex-1 bg-gradient-to-br p-4 relative">
       <div className="max-w-7xl mx-auto">
-        {/* Settings Button and Dropdown */}
+        {/* Bouton d’ouverture du menu réglages */}
         <div className="absolute top-4 right-4">
           <button
             onClick={() => setIsSettingsOpen(!isSettingsOpen)}
@@ -29,8 +39,9 @@ export const RéglagesView: React.FC = () => {
             <Settings className="w-6 h-6 text-gray-600" />
           </button>
 
+          {/* Dropdown des réglages */}
           {isSettingsOpen && (
-            <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
               <div className="py-1">
                 {settingsOptions.map((option, index) => (
                   <Link
@@ -48,7 +59,7 @@ export const RéglagesView: React.FC = () => {
           )}
         </div>
 
-        {/* Settings Content */}
+        {/* Contenu principal des réglages */}
         <div className="mt-16">
           <SettingsRouter />
         </div>
