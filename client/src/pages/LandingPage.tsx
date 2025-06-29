@@ -1,29 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Users, Shield, Globe } from 'lucide-react';
+import { Users, Shield, Globe } from 'lucide-react';
 
 const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Header */}
       <header className="relative">
-        <div className="absolute inset-0 bg-primary-400"></div>
+        <div className="absolute inset-0 bg-white"></div>
         <div className="relative px-4 py-6">
           <nav className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <Heart className="h-8 w-8 text-white" />
-              <span className="text-2xl font-bold text-white">MeetUp</span>
+    
+              <span className="text-2xl font-bold bg-gradient-romantic bg-clip-text text-transparent">MeetUp</span>
             </div>
             <div className="space-x-4">
               <Link
                 to="/login"
-                className="text-white hover:text-orange-200 transition-colors duration-200"
+                className="text-secondary-400 hover:text-primary-400 transition-colors duration-200"
               >
                 Connexion
               </Link>
               <Link
                 to="/register"
-                className="bg-white text-red-600 px-6 py-2 rounded-full font-semibold hover:bg-orange-50 transition-all duration-200 transform hover:scale-105"
+                className="bg-white text-secondary-600 px-6 py-2 rounded-full font-semibold hover:bg-primary-400 transition-all duration-200 transform hover:scale-105"
               >
                 S'inscrire
               </Link>
@@ -34,14 +34,14 @@ const LandingPage: React.FC = () => {
 
       {/* Hero Section */}
       <section className="relative py-20">
-        <div className="absolute inset-0 bg-gradient-romantic"></div>
+        <div className="absolute inset-0 bg-secondary-300"></div>
         <div className="relative max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
             Trouvez l'Amour
-            <span className="block text-yellow-300">en Afrique</span>
+            <span className="block text-yellow-300">où que vous soyez</span>
           </h1>
           <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-            Connectez-vous avec des célibataires africains du monde entier. 
+            Connectez-vous avec des célibataires  du monde entier. 
             Votre histoire d'amour commence ici.
           </p>
           <Link
@@ -66,7 +66,7 @@ const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">Communauté Authentique</h3>
               <p className="text-gray-600">
-                Rejoignez une communauté de célibataires africains authentiques à travers le monde.
+                Rejoignez une communauté de célibataires   à travers le monde.
               </p>
             </div>
             <div className="text-center">
@@ -84,7 +84,7 @@ const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">Connexion Mondiale</h3>
               <p className="text-gray-600">
-                Connectez-vous avec des personnes d'Afrique et de la diaspora africaine.
+                Connectez-vous avec des personnes dans le monde et trouvez votre moitié.
               </p>
             </div>
           </div>
@@ -113,8 +113,8 @@ const LandingPage: React.FC = () => {
       <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Heart className="h-6 w-6" />
-            <span className="text-xl font-bold">MeetUp</span>
+           
+            <span className="text-xl font-bold bg-gradient-romantic bg-clip-text text-transparent">MeetUp</span>
           </div>
           <p className="text-gray-400">
             © 2024 MeetUp. Tous droits réservés.

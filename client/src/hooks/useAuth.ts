@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabaseClient';
 import { AuthState, User } from '../types';
 
 export const useAuth = () => {
@@ -8,52 +9,75 @@ export const useAuth = () => {
     isLoading: true,
   });
 
-  // Mock user data for demonstration
-  const mockUser: User = {
-    id: '1',
-    name: 'Sarah Johnson',
-    age: 28,
-    bio: 'Love traveling, reading, and exploring new cultures. Looking for someone genuine and kind.',
-    location: 'Lagos, Nigeria',
-    photos: [
-      'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=500',
-      'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=500',
-    ],
-    isPremium: true,
-    isOnline: true,
-    interests: ['Travel', 'Reading', 'Cooking', 'Photography'],
-    lookingFor: 'Serious relationship',
-    gender: 'female',
-    occupation: 'Marketing Manager',
-    education: 'University Graduate',
-  };
-
+  // Écoute les changements de session Supabase
   useEffect(() => {
-    // Simulate authentication check
-    const timer = setTimeout(() => {
-      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      setAuthState({
-        user: isLoggedIn ? mockUser : null,
-        isAuthenticated: isLoggedIn,
-        isLoading: false,
-      });
-    }, 1000);
+    const getUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-    return () => clearTimeout(timer);
+      const user = session?.user;
+
+      if (user) {
+        setAuthState({
+          user: {
+            id: user.id,
+            name: user.user_metadata.full_name || 'Utilisateur',
+            email: user.email!,
+            photos: [],
+            isPremium: false,
+            isOnline: true,
+            bio: '',
+            age: 0,
+            location: '',
+            interests: [],
+            lookingFor: '',
+            gender: '',
+            occupation: '',
+            education: '',
+          },
+          isAuthenticated: true,
+          isLoading: false,
+        });
+      } else {
+        setAuthState({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+        });
+      }
+    };
+
+    getUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        getUser();
+      } else {
+        setAuthState({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+        });
+      }
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
-  const login = (email: string, password: string) => {
-    // Mock login
-    localStorage.setItem('isLoggedIn', 'true');
-    setAuthState({
-      user: mockUser,
-      isAuthenticated: true,
-      isLoading: false,
-    });
+  // Connexion par email/mot de passe
+  const login = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) throw error;
+    return data;
   };
 
-  const logout = () => {
-    localStorage.removeItem('isLoggedIn');
+  // Déconnexion réelle Supabase
+  const logout = async () => {
+    await supabase.auth.signOut();
     setAuthState({
       user: null,
       isAuthenticated: false,
@@ -61,14 +85,15 @@ export const useAuth = () => {
     });
   };
 
-  const register = (userData: Partial<User>) => {
-    // Mock registration
-    localStorage.setItem('isLoggedIn', 'true');
-    setAuthState({
-      user: { ...mockUser, ...userData },
-      isAuthenticated: true,
-      isLoading: false,
+  // Inscription
+  const register = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
     });
+
+    if (error) throw error;
+    return data;
   };
 
   return {

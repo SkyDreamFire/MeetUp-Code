@@ -19,7 +19,7 @@ import { FavorisView } from './components/favoris/FavorisView';
 import { ListeRougesView } from './components/ListeRouge/ListeRougesView';
 import { RechercherView } from './components/Rechercher/RechercherView';
 import { EnligneView } from './components/Enligne/Enligne';
-
+import { LogoutHandler } from './components/Réglages/LogoutHandler';
 // Page components
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
@@ -29,14 +29,38 @@ import Register from './pages/RegisterPage';
 // Route protégée
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex justify-center items-center">Chargement...</div>;
+  if (loading) return   <div className="min-h-screen bg-gradient-romantic flex items-center justify-center">
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-center">
+          <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <img src="/logo_final-removebg-preview.png" alt="logo" className="w-10 h-10 animate-pulse" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">MeeTup</h1>
+          <div className="flex space-x-1 justify-center">
+            <div className="w-2 h-2 bg-white rounded-full animate-bounce" />
+            <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-100" />
+            <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-200" />
+          </div>
+        </motion.div>
+      </div>;
   return user ? <>{children}</> : <Navigate to="/login" />;
 };
 
 // Route publique
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex justify-center items-center">Chargement...</div>;
+  if (loading) return   <div className="min-h-screen bg-gradient-romantic flex items-center justify-center">
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-center">
+          <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+            <img src="/logo_final-removebg-preview.png" alt="logo" className="w-10 h-10 animate-pulse" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">MeeTup</h1>
+          <div className="flex space-x-1 justify-center">
+            <div className="w-2 h-2 bg-white rounded-full animate-bounce" />
+            <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-100" />
+            <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-200" />
+          </div>
+        </motion.div>
+      </div>;
   return user ? <Navigate to="/dashboard" /> : <>{children}</>;
 };
 
@@ -130,6 +154,8 @@ function App() {
             <Route path="/dashboard" element={<ProtectedRoute><InternalApp /></ProtectedRoute>} />
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+            <Route path="/logout" element={<LogoutHandler />} />
+
           </Routes>
         </Router>
       </ConversationsProvider>

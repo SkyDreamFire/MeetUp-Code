@@ -1,23 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
-
-interface User {
-  id: string;
-  email: string;
-  profile: {
-    firstName: string;
-    lastName: string;
-    profileComplete: boolean;
-  };
-}
-
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
-  register: (data: RegisterData) => Promise<{ success: boolean; message: string }>;
-  logout: () => void;
-}
+import { supabase } from '../lib/supabaseClient';
 
 interface RegisterData {
   email: string;
@@ -30,115 +12,97 @@ interface RegisterData {
   country: string;
 }
 
+interface AuthContextType {
+  user: any;
+  login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
+  register: (data: RegisterData) => Promise<{ success: boolean; message?: string }>;
+  signInWithGoogle: () => Promise<{ success: boolean; message?: string }>;
+  logout: () => void;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-const API_BASE_URL = 'http://localhost:3001/api';
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
 
-  // Configure axios defaults
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-  }, []);
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+    });
 
-  // Check for existing token on mount
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const response = await axios.get(`${API_BASE_URL}/profile`);
-          if (response.data.success) {
-            setUser(response.data.user);
-          } else {
-            localStorage.removeItem('token');
-            delete axios.defaults.headers.common['Authorization'];
-          }
-        } catch (error) {
-          console.error('Auth check failed:', error);
-          localStorage.removeItem('token');
-          delete axios.defaults.headers.common['Authorization'];
-        }
-      }
-      setLoading(false);
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
     };
-
-    checkAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/login`, {
-        email,
-        password
-      });
-
-      if (response.data.success) {
-        const { token, user } = response.data;
-        localStorage.setItem('token', token);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setUser(user);
-        return { success: true, message: response.data.message };
-      } else {
-        return { success: false, message: response.data.message };
-      }
-    } catch (error: any) {
-      const message = error.response?.data?.message || 'Erreur de connexion';
-      return { success: false, message };
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      return { success: false, message: error.message };
     }
+    return { success: true };
   };
 
   const register = async (data: RegisterData) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/register`, data);
-
-      if (response.data.success) {
-        const { token, user } = response.data;
-        localStorage.setItem('token', token);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setUser(user);
-        return { success: true, message: response.data.message };
-      } else {
-        return { success: false, message: response.data.message };
-      }
-    } catch (error: any) {
-      const message = error.response?.data?.message || 'Erreur d\'inscription';
-      return { success: false, message };
+    if (data.password !== data.confirmPassword) {
+      return { success: false, message: "Les mots de passe ne correspondent pas." };
     }
+
+    // Créer l'utilisateur avec Supabase Auth
+    const { data: signUpData, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          dateOfBirth: data.dateOfBirth,
+          gender: data.gender,
+          country: data.country
+        }
+      }
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true };
+  };
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true };
   };
 
   const logout = async () => {
-    try {
-      await axios.post(`${API_BASE_URL}/logout`);
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
-      setUser(null);
-    }
-  };
+  await supabase.auth.signOut();
+  setUser(null); // Réinitialise ton état utilisateur
+};
 
-  const value = {
-    user,
-    loading,
-    login,
-    register,
-    logout
-  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, register, signInWithGoogle, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

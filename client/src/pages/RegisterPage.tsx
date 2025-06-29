@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {  Mail, Lock, User, Calendar, Globe, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import {
+  Mail, Lock, User, Calendar, Globe, Eye, EyeOff, AlertCircle, CheckCircle
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const RegisterPage: React.FC = () => {
@@ -37,63 +39,34 @@ const RegisterPage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const validateStep = (stepNumber: number) => {
     const newErrors: { [key: string]: string } = {};
 
     if (stepNumber === 1) {
-      if (!formData.email) {
-        newErrors.email = 'Email requis';
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Email invalide';
-      }
+      if (!formData.email) newErrors.email = 'Email requis';
+      else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email invalide';
 
-      if (!formData.password) {
-        newErrors.password = 'Mot de passe requis';
-      } else if (formData.password.length < 6) {
-        newErrors.password = 'Mot de passe trop court (min. 6 caractères)';
-      }
+      if (!formData.password) newErrors.password = 'Mot de passe requis';
+      else if (formData.password.length < 6) newErrors.password = 'Mot de passe trop court (min. 6 caractères)';
 
-      if (!formData.confirmPassword) {
-        newErrors.confirmPassword = 'Confirmation requise';
-      } else if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
-      }
+      if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirmation requise';
+      else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
     }
 
     if (stepNumber === 2) {
-      if (!formData.firstName) {
-        newErrors.firstName = 'Prénom requis';
-      }
-      if (!formData.lastName) {
-        newErrors.lastName = 'Nom requis';
-      }
-      if (!formData.dateOfBirth) {
-        newErrors.dateOfBirth = 'Date de naissance requise';
-      } else {
+      if (!formData.firstName) newErrors.firstName = 'Prénom requis';
+      if (!formData.lastName) newErrors.lastName = 'Nom requis';
+      if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date de naissance requise';
+      else {
         const age = new Date().getFullYear() - new Date(formData.dateOfBirth).getFullYear();
-        if (age < 18) {
-          newErrors.dateOfBirth = 'Vous devez avoir au moins 18 ans';
-        }
+        if (age < 18) newErrors.dateOfBirth = 'Vous devez avoir au moins 18 ans';
       }
-      if (!formData.gender) {
-        newErrors.gender = 'Genre requis';
-      }
-      if (!formData.country) {
-        newErrors.country = 'Pays requis';
-      }
+      if (!formData.gender) newErrors.gender = 'Genre requis';
+      if (!formData.country) newErrors.country = 'Pays requis';
     }
 
     setErrors(newErrors);
@@ -101,33 +74,35 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (validateStep(step)) {
-      setStep(step + 1);
-    }
+    if (validateStep(step)) setStep(step + 1);
   };
 
-  const handleBack = () => {
-    setStep(step - 1);
-  };
+  const handleBack = () => setStep(step - 1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateStep(2)) return;
 
     setLoading(true);
     setMessage('');
 
     try {
-      const result = await register(formData);
-      
-      if (result.success) {
-        navigate('/dashboard');
-      } else {
-        setMessage(result.message);
-      }
-    } catch (error) {
-      setMessage('Une erreur est survenue' + error);
+      const result = await register({
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        dateOfBirth: formData.dateOfBirth,
+        gender: formData.gender,
+        country: formData.country
+      });
+
+      if (result.success) navigate('/dashboard');
+      else setMessage(result.message);
+    } catch (error: any) {
+      console.error(error);
+      setMessage(error.message || 'Erreur lors de l’inscription');
     } finally {
       setLoading(false);
     }
@@ -139,9 +114,9 @@ const RegisterPage: React.FC = () => {
       <div className="max-w-md w-full">
       
                 <div className="text-center mb-0 ">
-         <span className=" mb-0 mt-0 text-4xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent">
-          MeetUp
-          </span>
+         <Link to="/" className="inline-flex items-center space-x-2">
+            <span className="text-4xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent">MeetUp</span>
+          </Link>
           <h2 className="mt-2 text-3xl font-bold text-gray-800 ">Créer un compte</h2>
           <p className="mt-0 text-gray-600">Rejoignez notre communauté</p>
         </div>
