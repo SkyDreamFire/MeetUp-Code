@@ -31,7 +31,7 @@ export const RéglagesView: React.FC = () => {
     <div className="flex-1 bg-gradient-to-br p-4 relative">
       <div className="max-w-7xl mx-auto">
         {/* Bouton d’ouverture du menu réglages */}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-6 right-4">
           <button
             onClick={() => setIsSettingsOpen(!isSettingsOpen)}
             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -41,7 +41,7 @@ export const RéglagesView: React.FC = () => {
 
           {/* Dropdown des réglages */}
           {isSettingsOpen && (
-            <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+            <div className="absolute right-0 mt-1 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
               <div className="py-1">
                 {settingsOptions.map((option, index) => (
                   <Link
