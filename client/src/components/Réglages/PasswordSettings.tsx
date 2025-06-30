@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { SettingsLayout } from '../layout/SettingsLayout';
+import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const PasswordSettings: React.FC = () => {
+  const { currentView, navigateToView } = useViewTransition('settings/password');
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+      <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Changer le mot de passe</h2>
       <form className="space-y-4">
         <div>
@@ -56,6 +60,7 @@ export const PasswordSettings: React.FC = () => {
           Mettre à jour le mot de passe
         </button>
       </form>
-    </div>
+      </div>
+    </SettingsLayout>
   );
 };

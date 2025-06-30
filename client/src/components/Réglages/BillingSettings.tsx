@@ -1,6 +1,9 @@
 import React from 'react';
+import { SettingsLayout } from '../layout/SettingsLayout';
+import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const BillingSettings: React.FC = () => {
+  const { currentView, navigateToView } = useViewTransition('settings/billing');
   const subscriptionPlans = [
     {
       name: 'Gratuit',
@@ -39,7 +42,8 @@ export const BillingSettings: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+      <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Facturation et abonnement</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -99,6 +103,7 @@ export const BillingSettings: React.FC = () => {
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </SettingsLayout>
   );
 };

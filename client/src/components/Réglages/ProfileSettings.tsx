@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { SettingsLayout } from '../layout/SettingsLayout';
+import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const ProfileSettings: React.FC = () => {
+  const { currentView, navigateToView } = useViewTransition('settings/profile');
   const [profileData, setProfileData] = useState({
     name: '',
     age: '',
@@ -23,7 +26,8 @@ export const ProfileSettings: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+      <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Paramètres du profil</h2>
       <form className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -151,6 +155,7 @@ export const ProfileSettings: React.FC = () => {
           Enregistrer les modifications
         </button>
       </form>
-    </div>
+      </div>
+    </SettingsLayout>
   );
 };
