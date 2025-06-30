@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">
-                Bonjour, {user?.profile?.firstName}!
+                Bonjour, {user?.user_metadata?.firstName}!
               </span>
               <button
                 onClick={handleLogout}
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
               <User className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Bienvenue, {user?.profile?.firstName} {user?.profile?.lastName}!
+              Bienvenue, {user?.user_metadata?.firstName} {user?.user_metadata?.lastName}!
             </h1>
             <p className="text-gray-600 mb-6">
               Votre voyage vers l'amour commence maintenant. Explorez et connectez-vous avec des personnes extraordinaires.
