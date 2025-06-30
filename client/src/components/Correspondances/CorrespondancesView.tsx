@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Heart, X } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 import { User } from '../../types';
+// import { label } from 'framer-motion/client';
 
 export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => void }> = ({ onMessageUser }) => {
   const [sortBy, setSortBy] = useState<string>('Pertinence');
@@ -17,13 +18,36 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
   ];
 
   // Simuler des données différentes pour chaque onglet
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const matchesByTab: { [key: string]: User[] } = {
     'Mes Correspondances': mockUsers,
     'Correspondances Mutuelles': mockUsers.slice(0, 2),
     'Correspondances Inversées': mockUsers.slice(2),
   };
 
-  const matches = matchesByTab[activeTab] || [];
+  // Afficher le trie pour les pertinance ...
+  const tableTrie = [
+    { id: 'Pertinence', label: 'Pertinence' },
+    { id: 'nouveaux', label: 'Nouveaux'},
+    { id: "Photo d'abort", label: "Photo d'abort"},
+    { id: 'Connexion', label: 'Connexion'},
+  ];
+
+  // Récupérer les correspondances pour l'onglet actif
+  // const matchesTable = {
+  //   'Pertinence': mockUsers,
+  //   'nouveaux': mockUsers.slice(0, 2),
+  //   "Photo d'abort": mockUsers.slice(2),
+  //   'Connexion': mockUsers.slice(2)
+  // };
+    
+    const matches = React.useMemo(() => {
+    let list = matchesByTab[activeTab] || [];
+    if (sortBy === 'nouveaux') {
+      list = list.filter(user => user.isNew);
+    }
+    return list;
+  }, [activeTab, sortBy, matchesByTab]);
 
   return (
     <div className="flex-1 bg-white">
@@ -56,10 +80,13 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
               onChange={(e) => setSortBy(e.target.value)}
               className="border-none bg-transparent text-sm font-medium"
             >
-              <option>Pertinence</option>
-              <option>Nouveaux</option>
-              <option>Photos d'abord</option>
-              <option>Connexion</option>
+              {/* Select pour les vue en pertinance ... */}
+              {tableTrie.map(todo => (
+                <option key={todo.id} value={todo.id}>
+                  {todo.label}
+                </option>
+              ))}
+              
             </select>
           </div>
         </div>
@@ -87,7 +114,7 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
               </div>
-              <h3 className="text-center text-lg font-semibold text-gray-800">{match.name}</h3>
+              <h3 className="text-center text-lg font-semibold text-gray-800">{match.name} <span><button>👨‍💼</button></span> </h3>
               <p className="text-center text-sm text-gray-600">{match.age} • {match.city}, {match.country}</p>
               <p className="text-center text-sm text-gray-500 mt-1">Cherchant: {match.interest}</p>
               <p className="text-center text-xs text-gray-400">Reçu: Il y a 3 heures</p>

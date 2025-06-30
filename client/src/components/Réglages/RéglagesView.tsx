@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Settings,
   Mail,
@@ -15,6 +15,7 @@ import { SettingsRouter } from './SettingsRouter';
 
 export const RéglagesView: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const settingsOptions = [
     { icon: Mail, label: 'Adresse Email', path: '/settings/email' },
@@ -44,15 +45,17 @@ export const RéglagesView: React.FC = () => {
             <div className="absolute right-0 mt-1 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
               <div className="py-1">
                 {settingsOptions.map((option, index) => (
-                  <Link
+                  <button
                     key={index}
-                    to={option.path}
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setIsSettingsOpen(false)}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => {
+                      setIsSettingsOpen(false);
+                      navigate(option.path);
+                    }}
                   >
                     <option.icon className="w-4 h-4 mr-3" />
                     {option.label}
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
