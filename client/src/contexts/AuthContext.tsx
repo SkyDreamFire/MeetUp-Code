@@ -24,8 +24,8 @@ interface RegisterData {
   profession?: string;
   education?: string;
   biography?: string;
-  username?: string;
-  phoneNumber?: string;
+
+ 
   photoUrl?: string;
   address?: Address;
   acceptTerms: boolean;
@@ -105,8 +105,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       profession: data.profession,
       education: data.education,
       biographie: data.biography,
-      username: data.username,
-      telephone: data.phoneNumber,
+    
+      
       newsletter: data.newsletter,
       est_verifie: true,
       est_en_ligne: true,
@@ -154,7 +154,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/completer-profil`,
+      },
+    });
     return error ? { success: false, message: error.message } : { success: true };
   };
 
