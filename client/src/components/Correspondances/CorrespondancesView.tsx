@@ -32,14 +32,6 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
     { id: "Photo d'abort", label: "Photo d'abort"},
     { id: 'Connexion', label: 'Connexion'},
   ];
-
-  // Récupérer les correspondances pour l'onglet actif
-  // const matchesTable = {
-  //   'Pertinence': mockUsers,
-  //   'nouveaux': mockUsers.slice(0, 2),
-  //   "Photo d'abort": mockUsers.slice(2),
-  //   'Connexion': mockUsers.slice(2)
-  // };
     
     const matches = React.useMemo(() => {
     let list = matchesByTab[activeTab] || [];
@@ -64,8 +56,11 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
                 {activeTab === tab.id && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600"></div>
                 )}
-              </button>
+              </button>             
             ))}
+            <div className="flex items-center justify-end space-x-2 py-2 rigth-0">
+              <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+            </div>
           </div>
         </div>
       </div>
@@ -114,13 +109,13 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
               </div>
-              <h3 className="text-center text-lg font-semibold text-gray-800">{match.name} <span><button>👨‍💼</button></span> </h3>
+              <h3 className="text-center text-lg font-semibold text-gray-800">{match.name} <span><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-user-round-icon lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg></button></span> </h3>
               <p className="text-center text-sm text-gray-600">{match.age} • {match.city}, {match.country}</p>
               <p className="text-center text-sm text-gray-500 mt-1">Cherchant: {match.interest}</p>
               <p className="text-center text-xs text-gray-400">Reçu: Il y a 3 heures</p>
               <div className="mt-4 flex justify-center space-x-4 text-gray-500 text-sm">
-                <button className="hover:text-red-500"><Heart className="w-4 h-4" /></button>
-                <button className="hover:text-yellow-500" onClick={() => onMessageUser && onMessageUser(match)}><span>💌</span></button>
+                <button className="hover:text-red-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-heart-icon lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+                <button className="hover:text-yellow-500" onClick={() => onMessageUser && onMessageUser(match)}><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-mail-icon lucide-mail"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span></button>
                 <button
                   className="hover:text-gray-600"
                   onClick={() => {
@@ -128,7 +123,7 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
                     setShowPhotos(true);
                   }}
                 >
-                  📷
+                  <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-image-icon lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></span>
                 </button>
               </div>
             </motion.div>
