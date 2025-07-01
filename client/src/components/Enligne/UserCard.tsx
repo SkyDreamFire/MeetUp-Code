@@ -4,6 +4,7 @@ import { User } from '../../types';
 
 interface UserCardProps {
   User: User;
+  onMessage: (user: any) => void;
 }
 
 export const UserCard: React.FC<UserCardProps> = ({ User }) => {
@@ -56,7 +57,8 @@ export const UserCard: React.FC<UserCardProps> = ({ User }) => {
         {/* Action Buttons */}
         <div className="flex gap-2">
           <button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 px-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-1">
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-4 h-4" 
+            onClick={() => onMessage(user)}/>
             Message
           </button>
           <button className="flex-1 bg-pink-500 hover:bg-pink-600 text-white py-2 px-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-1">
