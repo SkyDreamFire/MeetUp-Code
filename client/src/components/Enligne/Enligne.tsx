@@ -38,7 +38,7 @@ export const EnligneView: React.FC = () => {
 
   return (
     <div className="flex-1 bg-white">
-      <div className="border-b border-pink-200 bg-[#5a1d8c] text-white py-4">
+      <div className="border-b border-pink-200 bg-[#db77f7] text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-4">
@@ -102,7 +102,7 @@ export const EnligneView: React.FC = () => {
               </div>
             </div>
 
-            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-[#3D1E06] transition-colors border:black">
+            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-[#c94ced] transition-colors border:black">
               ENVOYER
             </button>
           </div>
@@ -184,7 +184,6 @@ export const EnligneView: React.FC = () => {
               <option value="age">Âge</option>
             </select>
           </div>
-          <span className="text-gray-600">1 - 35 de 3993</span>
           <div className="flex items-center space-x-4">
             <button className="px-3 py-1 border rounded hover:bg-gray-100">&lt; Précédent</button>
             <div className="flex space-x-1">
