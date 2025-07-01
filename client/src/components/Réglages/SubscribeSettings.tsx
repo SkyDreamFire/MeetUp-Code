@@ -1,6 +1,9 @@
 import React from 'react';
+import { SettingsLayout } from '../layout/SettingsLayout';
+import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const SubscribeSettings: React.FC = () => {
+  const { currentView, navigateToView } = useViewTransition('settings/subscribe');
   const features = [
     {
       icon: '💖',
@@ -53,7 +56,8 @@ export const SubscribeSettings: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+      <div className="p-6 bg-white rounded-lg shadow-lg">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Passez à Premium</h2>
         <p className="text-gray-600">
@@ -118,6 +122,7 @@ export const SubscribeSettings: React.FC = () => {
         <p>Paiement 100% sécurisé 🔒</p>
         <p>Annulez à tout moment</p>
       </div>
-    </div>
+      </div>
+    </SettingsLayout>
   );
 };

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { SettingsLayout } from '../layout/SettingsLayout';
+import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const HelpSettings: React.FC = () => {
+  const { currentView, navigateToView } = useViewTransition('settings/help');
   const [searchQuery, setSearchQuery] = useState('');
   
   const faqItems = [
@@ -32,7 +35,8 @@ export const HelpSettings: React.FC = () => {
   );
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+      <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Centre d'aide</h2>
 
       {/* Barre de recherche */}
@@ -118,6 +122,7 @@ export const HelpSettings: React.FC = () => {
           </a>
         </div>
       </div>
-    </div>
+      </div>
+    </SettingsLayout>
   );
 };

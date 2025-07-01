@@ -13,9 +13,10 @@ interface MessageListProps {
   conversations: Conversation[];
   onSelect: (conversation: Conversation) => void;
   onClose: () => void;
+  onRemove: (conversationId: string) => void;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ conversations, onSelect, onClose }) => {
+const MessageList: React.FC<MessageListProps> = ({ conversations, onSelect, onClose, onRemove }) => {
   return (
     <div className="mb-4 w-72 bg-white rounded-lg shadow-xl overflow-hidden">
       <div className="flex justify-between items-center p-3 bg-gray-50 border-b">
@@ -31,7 +32,7 @@ const MessageList: React.FC<MessageListProps> = ({ conversations, onSelect, onCl
         {conversations.map((conversation) => (
           <div
             key={conversation.id}
-            onClick={() => onSelect(conversation)}
+
             className="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0 transition-colors"
           >
             <div className="relative">
@@ -47,13 +48,22 @@ const MessageList: React.FC<MessageListProps> = ({ conversations, onSelect, onCl
                 </div>
               )}
             </div>
-            <div className="ml-3 flex-1">
+            <div className="ml-3 flex-1" onClick={() => onSelect(conversation)}>
               <div className="flex justify-between items-start">
                 <p className="font-medium text-gray-800">{conversation.name}</p>
                 <p className="text-sm text-gray-500">{conversation.age} ans</p>
               </div>
               <p className="text-sm text-gray-500 truncate">{conversation.location}</p>
             </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove(conversation.id);
+              }}
+              className="ml-2 text-gray-400 hover:text-red-500 transition-colors"
+            >
+              ✕
+            </button>
           </div>
         ))}
       </div>

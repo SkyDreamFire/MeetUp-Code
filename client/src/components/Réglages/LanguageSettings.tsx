@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { SettingsLayout } from '../layout/SettingsLayout';
+import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const LanguageSettings: React.FC = () => {
+  const { currentView, navigateToView } = useViewTransition('settings/language');
   const [selectedLanguage, setSelectedLanguage] = useState('fr');
 
   const languages = [
@@ -20,7 +23,8 @@ export const LanguageSettings: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+      <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Sélectionner la langue</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -85,6 +89,7 @@ export const LanguageSettings: React.FC = () => {
       >
         Enregistrer les préférences
       </button>
-    </div>
+      </div>
+    </SettingsLayout>
   );
 };

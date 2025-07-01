@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Crown, Send, Smile, Paperclip } from 'lucide-react';
+import { Search, Crown, Send, Smile, Paperclip, ArrowLeft } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
 
 interface Conversation {
@@ -40,7 +40,7 @@ export const MessagesView: React.FC = () => {
     },
   ]);
 
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0]);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState('');
 
   const mockMessages = [
@@ -53,16 +53,17 @@ export const MessagesView: React.FC = () => {
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      // Add message logic here
+      // Ajouter logique d'envoi ici si besoin
       setNewMessage('');
     }
   };
 
   return (
-    <div className="flex-1 bg-gray-50 flex">
-      {/* Conversations List */}
-      <div className="w-full md:w-1/3 lg:w-1/4 bg-white border-r border-gray-200">
-        {/* Header */}
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50 overflow-hidden">
+      {/* Liste des conversations */}
+      <div className={`md:block w-full md:w-1/3 lg:w-1/4 bg-white border-r border-gray-200 ${
+        selectedConversation ? 'hidden md:block' : 'block'
+      }`}>
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-3">Messages</h2>
           <div className="relative">
@@ -75,8 +76,7 @@ export const MessagesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Conversations */}
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto h-[calc(100vh-120px)]">
           {conversations.map((conversation) => (
             <motion.div
               key={conversation.id}
@@ -97,16 +97,11 @@ export const MessagesView: React.FC = () => {
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                   )}
                 </div>
-
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <h3 className="font-medium text-gray-800 truncate">
-                        {conversation.user.name}
-                      </h3>
-                      {conversation.user.isPremium && (
-                        <Crown className="w-4 h-4 text-accent-500" />
-                      )}
+                      <h3 className="font-medium text-gray-800 truncate">{conversation.user.name}</h3>
+                      {conversation.user.isPremium && <Crown className="w-4 h-4 text-accent-500" />}
                     </div>
                     <span className="text-xs text-gray-500">{conversation.timestamp}</span>
                   </div>
@@ -125,11 +120,17 @@ export const MessagesView: React.FC = () => {
         </div>
       </div>
 
-      {/* Chat Area */}
+      {/* Zone de conversation */}
       {selectedConversation ? (
-        <div className="flex-1 flex flex-col">
-          {/* Chat Header */}
-          <div className="bg-white p-4 border-b border-gray-200 flex items-center space-x-3">
+        <div className="flex-1 flex flex-col h-full">
+          {/* Header FIXE */}
+          <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-200 flex items-center space-x-3">
+            <button
+              className="md:hidden text-gray-500 hover:text-gray-800"
+              onClick={() => setSelectedConversation(null)}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
             <img
               src={selectedConversation.user.photos[0]}
               alt={selectedConversation.user.name}
@@ -138,9 +139,7 @@ export const MessagesView: React.FC = () => {
             <div className="flex-1">
               <div className="flex items-center space-x-2">
                 <h3 className="font-medium text-gray-800">{selectedConversation.user.name}</h3>
-                {selectedConversation.user.isPremium && (
-                  <Crown className="w-4 h-4 text-accent-500" />
-                )}
+                {selectedConversation.user.isPremium && <Crown className="w-4 h-4 text-accent-500" />}
               </div>
               <p className="text-sm text-gray-500">
                 {selectedConversation.isOnline ? 'Online now' : 'Last seen 2 hours ago'}
@@ -148,26 +147,22 @@ export const MessagesView: React.FC = () => {
             </div>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Messages SCROLLABLE */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-gray-50">
             {mockMessages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                  className={`max-w-xs md:max-w-md px-4 py-2 rounded-2xl ${
                     message.sender === 'me'
                       ? 'bg-primary-500 text-white'
                       : 'bg-white border border-gray-200 text-gray-800'
                   }`}
                 >
                   <p className="text-sm">{message.text}</p>
-                  <p
-                    className={`text-xs mt-1 ${
-                      message.sender === 'me' ? 'text-primary-100' : 'text-gray-500'
-                    }`}
-                  >
+                  <p className={`text-xs mt-1 ${message.sender === 'me' ? 'text-primary-100' : 'text-gray-500'}`}>
                     {message.timestamp}
                   </p>
                 </div>
@@ -175,8 +170,8 @@ export const MessagesView: React.FC = () => {
             ))}
           </div>
 
-          {/* Message Input */}
-          <div className="bg-white border-t border-gray-200 p-4">
+          {/* Input FIXE */}
+          <div className="sticky bottom-0 z-10 bg-white border-t border-gray-200 p-4">
             <div className="flex items-center space-x-3">
               <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
                 <Paperclip className="w-5 h-5" />
@@ -184,16 +179,14 @@ export const MessagesView: React.FC = () => {
               <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
                 <Smile className="w-5 h-5" />
               </button>
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Type a message..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Type a message..."
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -206,7 +199,7 @@ export const MessagesView: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex items-center justify-center bg-gray-50">
+        <div className="flex-1 hidden md:flex items-center justify-center bg-gray-50">
           <div className="text-center">
             <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-8 h-8 text-gray-400" />

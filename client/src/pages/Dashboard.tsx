@@ -16,12 +16,18 @@ const Dashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Heart className="h-8 w-8 text-red-600" />
+               <img src="/logo_final-removebg-preview.png" alt="Logo" className=" h-10 w-15 rounded-full bg-white" />
               <span className="text-2xl font-bold text-gray-800">MeetUp</span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700">
-                Bonjour, {user?.user_metadata?.firstName}!
+            <select value=""
+                className="bg-transparent border border-white rounded px-3 py-1">
+                  <option value="">Francais</option>
+                  <option>Anglais </option>
+            </select>
+
+             <span className="text-gray-700">
+                Bonjour {user?.user_metadata?.firstName}!
               </span>
               <button
                 onClick={handleLogout}
@@ -44,7 +50,7 @@ const Dashboard: React.FC = () => {
               <User className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Bienvenue, {user?.user_metadata?.firstName} {user?.user_metadata?.lastName}!
+              Bienvenue {user?.user_metadata?.firstName} {user?.user_metadata?.lastName}!
             </h1>
             <p className="text-gray-600 mb-6">
               Votre voyage vers l'amour commence maintenant. Explorez et connectez-vous avec des personnes extraordinaires.
