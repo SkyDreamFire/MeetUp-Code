@@ -5,6 +5,7 @@ export interface User {
   gender: 'Homme' | 'Femme';
   seeking: 'Homme' | 'Femme';
   country: string;
+  photos: string[];
   state: string;
   city: string;
   profileImage?: string;
