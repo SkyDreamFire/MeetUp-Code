@@ -1,59 +1,33 @@
 export interface User {
-  id: string;
+  id: number;
   name: string;
   age: number;
-  email:string;
-  bio: string;
-  location: string;
-  photos: string[];
+  gender: 'Homme' | 'Femme';
+  seeking: 'Homme' | 'Femme';
+  country: string;
+  state: string;
+  city: string;
   profileImage?: string;
-  isPremium: boolean;
   isOnline: boolean;
-  lastSeen?: Date;
-  lastActive: number;
-  isNew?: boolean;
-  interests: string[];
-  lookingFor: string;
-  gender: 'male' | 'female' | "";
-  occupation?: string;
-  education?: string;
-  country?: string;
-  city?: string;
-  interest?: string;
-  hasPhoto?: boolean;
-  isVerified?: boolean;
-  
+  lastOnline?: string;
+  isPremium: boolean;
+  isVerified: boolean;
+  hasPhoto: boolean;
+  relationshipType: RelationshipType[];
+  joinDate: string;
+  popularityScore: number;
+  bio?: string;
 }
 
-export interface Message {
-  id: string;
-  senderId: string;
-  receiverId: string;
-  content: string;
-  timestamp: Date;
-  isRead: boolean;
-}
-
-export interface Match {
-  id: string;
-  users: [string, string];
-  timestamp: Date;
-  isActive: boolean;
-}
-
-export interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-}
+export type RelationshipType = 'noPreference' | 'penPal' | 'friendship' | 'romance' | 'longTerm';
 
 export interface SearchFilters {
-  gender: string;
-  seeking: string;
+  gender: 'Homme' | 'Femme';
+  seeking: 'Homme' | 'Femme';
   ageFrom: string;
   ageTo: string;
-  connection: string;
-  sortBy: string;
+  connection: 'Pas de préférence' | 'En ligne maintenant' | 'Récemment en ligne';
+  sortBy: 'Nouveaux' | 'Dernière connexion' | 'Populaires';
   withPhoto: boolean;
   verifiedOnly: boolean;
   subscribeNow: boolean;
@@ -68,4 +42,18 @@ export interface SearchFilters {
     romance: boolean;
     longTerm: boolean;
   };
+}
+
+export interface SavedSearch {
+  id: number;
+  name: string;
+  lastUsed: string;
+  filters: SearchFilters;
+}
+
+export interface PopularSearch {
+  id: number;
+  name: string;
+  count: number;
+  filters?: Partial<SearchFilters>;
 }

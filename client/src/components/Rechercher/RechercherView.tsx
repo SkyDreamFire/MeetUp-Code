@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Lock, ChevronDown, Filter, X } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
+import { mockSavedSearches, mockPopularSearches } from '../../data/savedSearches';
 import { User, SearchFilters } from '../../types';
-
+import { searchUsers } from '../../utils/searchUtils';
 
 export const RechercherView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('advanced');
   const [activeLocationTab, setActiveLocationTab] = useState('single');
-  const [users] = useState<User[]>(mockUsers);
+  const [allUsers] = useState<User[]>(mockUsers);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(mockUsers);
   const [isLoading, setIsLoading] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -17,7 +19,7 @@ export const RechercherView: React.FC = () => {
     gender: 'Homme',
     seeking: 'Femme',
     ageFrom: '19',
-    ageTo: '22',
+    ageTo: '35',
     connection: 'Pas de préférence',
     sortBy: 'Nouveaux',
     withPhoto: true,
@@ -49,84 +51,31 @@ export const RechercherView: React.FC = () => {
 
   const handleSearch = () => {
     setIsLoading(true);
-    // Simulate search
+    
+    // Simulate API call delay
     setTimeout(() => {
+      const results = searchUsers(allUsers, searchFilters);
+      setFilteredUsers(results);
       setIsLoading(false);
       setShowMobileFilters(false);
-    }, 2000);
+    }, 1000);
   };
 
-  // Mock data for saved searches
-  const [savedSearches] = useState([
-    {
-      id: 1,
-      name: "Recherche Cameroun",
-      lastUsed: "il y a 2 jours",
-      filters: {
-        gender: 'Homme',
-        seeking: 'Femme',
-        ageFrom: '19',
-        ageTo: '22',
-        connection: 'En ligne maintenant',
-        sortBy: 'Nouveaux',
-        withPhoto: true,
-        verifiedOnly: false,
-        subscribeNow: false,
-        country: 'Cameroun',
-        state: 'West',
-        city: 'Dschang',
-        distance: '250',
-        relationshipType: {
-          noPreference: false,
-          penPal: false,
-          friendship: false,
-          romance: true,
-          longTerm: false
-        }
-      }
-    },
-    {
-      id: 2,
-      name: "Recherche Nigeria",
-      lastUsed: "hier",
-      filters: {
-        gender: 'Femme',
-        seeking: 'Homme',
-        ageFrom: '25',
-        ageTo: '30',
-        connection: 'Récemment en ligne',
-        sortBy: 'Populaires',
-        withPhoto: false,
-        verifiedOnly: true,
-        subscribeNow: false,
-        country: 'Nigeria',
-        state: 'Centre',
-        city: 'Bamenda',
-        distance: '500',
-        relationshipType: {
-          noPreference: true,
-          penPal: false,
-          friendship: true,
-          romance: false,
-          longTerm: true
-        }
-      }
-    }
-  ]);
+  // Auto-search when filters change
+  useEffect(() => {
+    const results = searchUsers(allUsers, searchFilters);
+    setFilteredUsers(results);
+  }, [searchFilters, allUsers]);
 
-  // Mock data for popular searches
-  const popularSearches = [
-    { id: 1, name: "Femmes 20-25 ans Cameroun", count: 1250 },
-    { id: 2, name: "Hommes vérifiés Nigeria", count: 890 },
-    { id: 3, name: "Relations sérieuses Ghana", count: 675 },
-    { id: 4, name: "Correspondants Afrique", count: 432 }
-  ];
+  const applySavedSearch = (filters: SearchFilters) => {
+    setSearchFilters(filters);
+    setActiveTab('advanced');
+    handleSearch();
+  };
 
-  const applySavedSearch = (filters: any) => {
-    setSearchFilters(prev => ({
-      ...prev,
-      ...filters
-    }));
+  const applyPopularSearch = (partialFilters: any) => {
+    const mergedFilters = { ...searchFilters, ...partialFilters };
+    setSearchFilters(mergedFilters);
     setActiveTab('advanced');
     handleSearch();
   };
@@ -141,11 +90,11 @@ export const RechercherView: React.FC = () => {
                 Recherches sauvegardées
               </h1>
               <span className="text-sm text-gray-500">
-                {savedSearches.length} recherche{savedSearches.length > 1 ? 's' : ''} sauvegardée{savedSearches.length > 1 ? 's' : ''}
+                {mockSavedSearches.length} recherche{mockSavedSearches.length > 1 ? 's' : ''} sauvegardée{mockSavedSearches.length > 1 ? 's' : ''}
               </span>
             </div>
             <div className="space-y-4">
-              {savedSearches.map(search => (
+              {mockSavedSearches.map(search => (
                 <div key={search.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start">
                     <div>
@@ -177,15 +126,18 @@ export const RechercherView: React.FC = () => {
               </span>
             </div>
             <div className="space-y-4">
-              {popularSearches.map(search => (
+              {mockPopularSearches.map(search => (
                 <div key={search.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-medium text-gray-900">{search.name}</h3>
                       <p className="text-sm text-gray-500 mt-1">{search.count} recherches cette semaine</p>
                     </div>
-                    <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:from-pink-600 hover:to-purple-700 transition-colors">
-                      rechercher
+                    <button 
+                      onClick={() => applyPopularSearch(search.filters)}
+                      className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:from-pink-600 hover:to-purple-700 transition-colors"
+                    >
+                      Rechercher
                     </button>
                   </div>
                 </div>
@@ -202,52 +154,77 @@ export const RechercherView: React.FC = () => {
                 Résultats de recherche
               </h1>
               <span className="text-sm text-gray-500">
-                {users.length} profil{users.length > 1 ? 's' : ''} trouvé{users.length > 1 ? 's' : ''}
+                {filteredUsers.length} profil{filteredUsers.length > 1 ? 's' : ''} trouvé{filteredUsers.length > 1 ? 's' : ''}
               </span>
             </div>
 
             {/* Results Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-              {users.map((user) => (
-                <motion.div
-                  key={user.id}
-                  whileHover={{ y: -4 }}
-                  className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-pink-100 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="relative">
-                      <img
-                        src={user.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
-                        alt={`Photo de profil de ${user.name}`}
-                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
-                      />
-                      {user.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
-                        {user.name}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-gray-600">
-                        {user.age} ans • {user.city}
-                      </p>
-                      {user.isPremium && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
-                          Vérifié
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => setSelectedUser(user)}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:from-pink-600 hover:to-purple-700 transition-all duration-200"
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="w-8 h-8 border-4 border-pink-500/30 border-t-pink-500 rounded-full animate-spin"></div>
+                <span className="ml-3 text-gray-600">Recherche en cours...</span>
+              </div>
+            ) : filteredUsers.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <Search className="w-16 h-16 mx-auto" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun résultat trouvé</h3>
+                <p className="text-gray-500">Essayez de modifier vos critères de recherche</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                {filteredUsers.map((user) => (
+                  <motion.div
+                    key={user.id}
+                    whileHover={{ y: -4 }}
+                    className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-pink-100 hover:shadow-lg transition-all duration-300"
                   >
-                    Voir le profil
-                  </button>
-                </motion.div>
-              ))}
-            </div>
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="relative">
+                        <img
+                          src={user.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`}
+                          alt={`Photo de profil de ${user.name}`}
+                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
+                        />
+                        {user.isOnline && (
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
+                          {user.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-600">
+                          {user.age} ans • {user.city}
+                        </p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          {user.isVerified && (
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              Vérifié
+                            </span>
+                          )}
+                          {user.isPremium && (
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                              Premium
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {user.bio && (
+                      <p className="text-xs text-gray-600 mb-3 line-clamp-2">{user.bio}</p>
+                    )}
+                    <button 
+                      onClick={() => setSelectedUser(user)}
+                      className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:from-pink-600 hover:to-purple-700 transition-all duration-200"
+                    >
+                      Voir le profil
+                    </button>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </>
         );
     }
@@ -382,7 +359,7 @@ export const RechercherView: React.FC = () => {
           </div>
         </div>
 
-        {/* Profile Image Modal */}
+        {/* Profile Modal */}
         <AnimatePresence>
           {selectedUser && (
             <motion.div
@@ -396,20 +373,53 @@ export const RechercherView: React.FC = () => {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="relative max-w-5xl w-full"
+                className="relative max-w-md w-full bg-white rounded-xl overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <img
-                  src={selectedUser.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedUser.name}`}
-                  alt={`Photo de profil de ${selectedUser.name}`}
-                  className="w-full h-[80vh] object-contain rounded-lg"
-                />
-                <button
-                  onClick={() => setSelectedUser(null)}
-                  className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 rounded-full p-2 backdrop-blur-sm transition-colors"
-                >
-                  <X className="w-6 h-6 text-white" />
-                </button>
+                <div className="relative">
+                  <img
+                    src={selectedUser.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedUser.name}`}
+                    alt={`Photo de profil de ${selectedUser.name}`}
+                    className="w-full h-64 object-cover"
+                  />
+                  <button
+                    onClick={() => setSelectedUser(null)}
+                    className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 rounded-full p-2 backdrop-blur-sm transition-colors"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                </div>
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedUser.name}</h2>
+                  <p className="text-gray-600 mb-4">{selectedUser.age} ans • {selectedUser.city}, {selectedUser.country}</p>
+                  {selectedUser.bio && (
+                    <p className="text-gray-700 mb-4">{selectedUser.bio}</p>
+                  )}
+                  <div className="flex items-center space-x-2 mb-4">
+                    {selectedUser.isVerified && (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        Vérifié
+                      </span>
+                    )}
+                    {selectedUser.isPremium && (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                        Premium
+                      </span>
+                    )}
+                    {selectedUser.isOnline ? (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        En ligne
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                        {selectedUser.lastOnline}
+                      </span>
+                    )}
+                  </div>
+                  <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-colors">
+                    Envoyer un message
+                  </button>
+                </div>
               </motion.div>
             </motion.div>
           )}
@@ -528,7 +538,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Résultats par:</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Trier par:</label>
           <div className="relative">
             <select
               value={searchFilters.sortBy}
@@ -546,32 +556,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       {/* Location Section */}
       <div className="border-t pt-6">
-        <h3 className="text-sm font-medium text-gray-900 mb-4">Vivant en</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-4">Localisation</h3>
         
-        {/* Location Tabs */}
-        <div className="flex space-x-0 mb-4">
-          <button
-            onClick={() => setActiveLocationTab('single')}
-            className={`flex-1 px-3 py-2 text-xs font-medium rounded-l-lg border transition-colors ${
-              activeLocationTab === 'single'
-                ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-pink-500'
-                : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-            }`}
-          >
-            Pays Unique
-          </button>
-          <button
-            onClick={() => setActiveLocationTab('multiple')}
-            className={`flex-1 px-3 py-2 text-xs font-medium rounded-r-lg border-t border-r border-b transition-colors ${
-              activeLocationTab === 'multiple'
-                ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-pink-500'
-                : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-            }`}
-          >
-            Pays Multiples
-          </button>
-        </div>
-
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Pays</label>
@@ -600,6 +586,11 @@ const SearchForm: React.FC<SearchFormProps> = ({
                 <option value="West">West</option>
                 <option value="Centre">Centre</option>
                 <option value="Littoral">Littoral</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Greater Accra">Greater Accra</option>
+                <option value="Ashanti">Ashanti</option>
+                <option value="Western">Western</option>
               </select>
               <ChevronDown className="absolute right-2 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" />
             </div>
@@ -616,27 +607,15 @@ const SearchForm: React.FC<SearchFormProps> = ({
                 <option value="Dschang">Dschang</option>
                 <option value="Bafoussam">Bafoussam</option>
                 <option value="Bamenda">Bamenda</option>
+                <option value="Yaoundé">Yaoundé</option>
+                <option value="Douala">Douala</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Accra">Accra</option>
+                <option value="Kumasi">Kumasi</option>
+                <option value="Takoradi">Takoradi</option>
               </select>
               <ChevronDown className="absolute right-2 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Distance</label>
-            <div className="flex items-center space-x-2">
-              <div className="relative flex-1">
-                <select
-                  value={searchFilters.distance}
-                  onChange={(e) => updateFilter('distance', e.target.value)}
-                  className="w-full appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
-                >
-                  <option value="250">250</option>
-                  <option value="500">500</option>
-                  <option value="1000">1000</option>
-                </select>
-                <ChevronDown className="absolute right-2 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" />
-              </div>
-              <span className="text-sm text-gray-500">km</span>
             </div>
           </div>
         </div>
@@ -644,7 +623,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       {/* Relationship Type */}
       <div className="border-t pt-6">
-        <h3 className="text-sm font-medium text-gray-900 mb-4">Recherchant</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-4">Type de relation</h3>
         <div className="space-y-3">
           <div className="flex items-center space-x-3">
             <input
@@ -694,7 +673,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
             />
             <label htmlFor="romance" className="text-sm text-gray-700">
-              Amour / Rencontres
+              Amour / Romance
             </label>
           </div>
 
@@ -725,7 +704,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
             />
             <label htmlFor="verified" className="text-sm text-gray-700">
-              Afficher uniquement les utilisateurs vérifiés
+              Utilisateurs vérifiés uniquement
             </label>
           </div>
 
@@ -751,7 +730,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
             />
             <label htmlFor="subscribe" className="text-sm text-gray-700 flex items-center space-x-1">
-              <span>S'abonner Maintenant !</span>
+              <span>Membres Premium</span>
               <Lock className="w-4 h-4 text-gray-400" />
             </label>
           </div>
