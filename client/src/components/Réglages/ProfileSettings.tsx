@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SettingsLayout } from '../layout/SettingsLayout';
+
 import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const ProfileSettings: React.FC = () => {
@@ -26,7 +26,7 @@ export const ProfileSettings: React.FC = () => {
   };
 
   return (
-    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+ 
       <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Paramètres du profil</h2>
       <form className="space-y-4">
@@ -156,6 +156,6 @@ export const ProfileSettings: React.FC = () => {
         </button>
       </form>
       </div>
-    </SettingsLayout>
+   
   );
 };

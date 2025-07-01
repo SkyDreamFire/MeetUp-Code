@@ -1,11 +1,11 @@
 import React from 'react';
-import { SettingsLayout } from '../layout/SettingsLayout';
+
 import { useViewTransition } from '../../hooks/useViewTransition';
 
 export const EmailSettings: React.FC = () => {
   const { currentView, navigateToView } = useViewTransition('settings/email');
   return (
-    <SettingsLayout currentView={currentView} onNavigate={navigateToView}>
+   
       <div className="p-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6">Paramètres d'email</h2>
         <form className="space-y-4">
@@ -47,6 +47,6 @@ export const EmailSettings: React.FC = () => {
           </button>
         </form>
       </div>
-    </SettingsLayout>
+    
   );
 };

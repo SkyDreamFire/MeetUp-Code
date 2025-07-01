@@ -33,6 +33,13 @@ import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import CompleterProfil from './pages/CompleterProfil';
+import { SubscribeSettings } from './components/Réglages/SubscribeSettings';
+import { EmailSettings } from './components/Réglages/EmailSettings';
+import { PasswordSettings } from './components/Réglages/PasswordSettings';
+import { ProfileSettings } from './components/Réglages/ProfileSettings';
+import { BillingSettings } from './components/Réglages/BillingSettings';
+import { HelpSettings } from './components/Réglages/HelpSettings';
+import { LanguageSettings } from './components/Réglages/LanguageSettings';
 
 // Route protégée
 const LoadingScreen = () => (
@@ -89,14 +96,13 @@ function InternalApp() {
       case 'vue de profil': return <VueDeProfilView />;
       case 'liste rouge': return <ListeRougesView />;
       case 'profile': return <ProfileView user={user} />;
-      case 'settings/email':
-      case 'settings/password':
-      case 'settings/profile':
-      case 'settings/billing':
-      case 'settings/language':
-      case 'settings/help':
-      case 'settings/subscribe':
-        return <SettingsRouter />;
+      case 'settings/email': return <EmailSettings />;
+      case 'settings/password': return <PasswordSettings />;
+      case 'settings/profile': return <ProfileSettings />;
+      case 'settings/billing': return <BillingSettings />;
+      case 'settings/language': return <LanguageSettings />;
+      case 'settings/help': return <HelpSettings />;
+      case 'settings/subscribe': return <SubscribeSettings />;
       default: return <EnligneView />;
     }
   };

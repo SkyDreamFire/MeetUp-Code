@@ -59,6 +59,7 @@ export interface ProfilComplet {
   profession?: string;
   education?: string;
   est_verifie?: boolean;
+  est_premium?: boolean;
   est_en_ligne?: boolean;
   derniere_connexion?: string;
   photos?: Photo[];

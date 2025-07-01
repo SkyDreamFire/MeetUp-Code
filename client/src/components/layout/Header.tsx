@@ -1,9 +1,9 @@
 // 📁 src/components/Header.tsx
 import React, { useState } from 'react';
-import { RéglagesView } from '../Réglages/RéglagesView';
-import { Crown } from 'lucide-react';
+import { Crown, Settings, Mail, Lock, User, CreditCard, Languages, HelpCircle, UserPlus, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useUserProfile } from '../../hooks/useUserProfile';
+
 
 interface HeaderProps {
   onNavigate: (view: string) => void;
@@ -12,13 +12,27 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { profile, loading } = useUserProfile();
+
+
+  const settingsOptions = [
+    { icon: Mail, label: 'Adresse Email', path: 'email' },
+    { icon: User, label: 'Paramètres profil', path: 'profile' },
+    { icon: Lock, label: 'Mot de passe', path: 'password' },
+    { icon: Languages, label: 'Sélectionner la langue', path: 'language' },
+    { icon: CreditCard, label: 'Facturation', path: 'billing' },
+    { icon: UserPlus, label: 'Abonnez-vous', path: 'subscribe' },
+    { icon: HelpCircle, label: 'Aide', path: 'help' },
+    { icon: LogOut, label: 'Déconnecter', path: '/logout' },
+  ];
 
   const navItems = [
     { id: 'En ligne', label: 'En ligne' },
     { id: 'correspondances', label: 'Correspondances' },
     { id: 'rechercher', label: 'Rechercher' },
-    { id: 'messages', label: 'Messages' }
+    { id: 'messages', label: 'Messages' },
+    
   ];
 
   return (
@@ -29,10 +43,13 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <img src="/logo_final-removebg-preview.png" alt="Logo" className=" h-10 w-15 rounded-full bg-white" />
+          <img src="/logo_final-removebg-preview.png" alt="Logo" className="h-10 w-15 rounded-full bg-white" />
 
           <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-2 cursor-pointer">
-            <span onClick={() => onNavigate('dashboard')} className="text-xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent">
+            <span
+              onClick={() => onNavigate('dashboard')}
+              className="text-xl font-display font-bold bg-gradient-romantic bg-clip-text text-transparent"
+            >
               MeetUp
             </span>
           </motion.div>
@@ -85,7 +102,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
           </nav>
 
           <div className="flex items-center space-x-3">
-            {profile?.est_premium && (
+            {/* {profile?.est_premium && ( */}
               <motion.div
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -94,19 +111,44 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
                 <Crown className="w-4 h-4 text-white" />
                 <span className="text-white text-sm font-medium">Premium</span>
               </motion.div>
-            )}
+            {/* )} */}
 
-            <RéglagesView />
+            <div className="relative">
+              <button
+                onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <Settings className="w-6 h-6 text-gray-600" />
+              </button>
 
-            {profile?.photos?.find(p => p.est_principale) && (
-              <motion.img
-                whileHover={{ scale: 1.1 }}
-                src={profile.photos.find(p => p.est_principale)?.url_photo || ''}
-                alt={`${profile.nom} ${profile.prenom}`}
-                className="w-8 h-8 rounded-full object-cover border-2 border-primary-200 cursor-pointer"
-                onClick={() => onNavigate('profile')}
-              />
-            )}
+              {isSettingsOpen && (
+                <div className="absolute right-0 mt-1 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1">
+                    {settingsOptions.map((option, index) => (
+                      <button
+                        key={index}
+                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => {
+                          setIsSettingsOpen(false);
+                          onNavigate(`settings/${option.path}`);
+                        }}
+                      >
+                        <option.icon className="w-4 h-4 mr-3" />
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <motion.img
+              whileHover={{ scale: 1.1 }}
+              src={profile?.photos?.find(p => p.est_principale)?.url_photo || '/icons8-user-default-64.png'}
+              alt={`${profile?.nom || 'User'} ${profile?.prenom || 'Profile'}`}
+              className="w-8 h-8 rounded-full object-cover border-2 border-primary-200 cursor-pointer"
+              onClick={() => onNavigate('profile')}
+            />
           </div>
         </div>
 
