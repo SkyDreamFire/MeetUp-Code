@@ -32,6 +32,7 @@ import LandingPage from './pages/LandingPage';
 import Login from './pages/LoginPage';
 import Register from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
+import CompleterProfil from './pages/CompleterProfil';
 
 // Route protégée
 const LoadingScreen = () => (
@@ -131,6 +132,8 @@ function App() {
         <Router>
           <Toaster position="top-center" />
           <Routes>
+            <Route path="/completer-profil" element={<CompleterProfil />} />
+
             <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
             <Route path="/dashboard/*" element={<ProtectedRoute><InternalApp /></ProtectedRoute>} />
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
