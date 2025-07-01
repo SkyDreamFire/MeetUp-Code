@@ -101,7 +101,7 @@ export const SubscribeSettings: React.FC = () => {
         ))}
       </div>
 
-      {/* Payment Methods */}
+      {/* Moyens de paiement acceptés */}
       <div className="border-t pt-8">
         <h3 className="text-lg font-semibold mb-4">Moyens de paiement acceptés</h3>
         <div className="flex space-x-4">
@@ -116,7 +116,6 @@ export const SubscribeSettings: React.FC = () => {
           </div>
         </div>
       </div>
-
       {/* Security Notice */}
       <div className="mt-8 text-center text-sm text-gray-500">
         <p>Paiement 100% sécurisé 🔒</p>
