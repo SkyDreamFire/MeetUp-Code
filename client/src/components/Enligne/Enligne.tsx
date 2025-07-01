@@ -47,9 +47,9 @@ export const EnligneView: React.FC = () => {
                 onChange={(e) => handleFilterChange({ gender: e.target.value })}
                 className="bg-transparent border border-white rounded px-3 py-1"
               >
-                <option value="Homme">Je suis un(e)</option>
-                <option value="Homme">Homme</option>
-                <option value="Femme">Femme</option>
+                <option value="" className="text-black">Je suis un(e)</option>
+                <option value="Homme" className="text-black">Homme</option>
+                <option value="Femme" className="text-black">Femme</option>
               </select>
 
               <select
@@ -57,9 +57,9 @@ export const EnligneView: React.FC = () => {
                 onChange={(e) => handleFilterChange({ lookingFor: e.target.value })}
                 className="bg-transparent border border-white rounded px-3 py-1"
               >
-                <option value="">Je recherche un(e)</option>
-                <option value="Homme">Homme</option>
-                <option value="Femme">Femme</option>
+                <option value="" className="text-black">Je recherche un(e)</option>
+                <option value="Homme" className="text-black">Homme</option>
+                <option value="Femme" className="text-black">Femme</option>
               </select>
 
               <select
@@ -67,8 +67,7 @@ export const EnligneView: React.FC = () => {
                 onChange={(e) => handleFilterChange({ location: e.target.value })}
                 className="bg-transparent border border-white rounded px-3 py-1"
               >
-                <option value="">De</option>
-                <option value="Tous Pays">Tous Pays</option>
+                <option value="Tous Pays" className="text-black">Tous Pays</option>
               </select>
 
               <div className="flex items-center space-x-2">
@@ -103,7 +102,7 @@ export const EnligneView: React.FC = () => {
               </div>
             </div>
 
-            <button className="bg-[#5C2E0A] text-white px-4 py-1 rounded hover:bg-[#3D1E06] transition-colors">
+            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-[#3D1E06] transition-colors border:black">
               ENVOYER
             </button>
           </div>
