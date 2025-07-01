@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Crown, Send, Smile, Paperclip, ArrowLeft } from 'lucide-react';
 import { mockUsers } from '../../data/mockUsers';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+
+interface Message {
+  id: string;
+  text: string;
+  sender: 'me' | 'them';
+  timestamp: string;
+}
 
 interface Conversation {
   id: string;
@@ -42,25 +51,57 @@ export const MessagesView: React.FC = () => {
 
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  const mockMessages = [
-    { id: '1', text: 'Hi there! I really liked your profile 😊', sender: 'them', timestamp: '10:30 AM' },
-    { id: '2', text: 'Thank you! I love your photos too', sender: 'me', timestamp: '10:32 AM' },
-    { id: '3', text: 'What do you like to do for fun?', sender: 'them', timestamp: '10:35 AM' },
-    { id: '4', text: 'I love traveling and trying new restaurants. How about you?', sender: 'me', timestamp: '10:37 AM' },
-    { id: '5', text: 'That sounds amazing! I\'m really into hiking and photography', sender: 'them', timestamp: '10:40 AM' },
-  ];
+  const [messagesByConversation, setMessagesByConversation] = useState<Record<string, Message[]>>({
+    '1': [
+      { id: '1', text: 'Hi there! 😊', sender: 'them', timestamp: '10:30' },
+      { id: '2', text: 'Thanks! 😄', sender: 'me', timestamp: '10:31' },
+    ],
+    '2': [
+      { id: '1', text: 'Hey! How’s it going?', sender: 'them', timestamp: '12:00' },
+    ],
+    '3': [],
+  });
+
+  const messages = selectedConversation
+    ? messagesByConversation[selectedConversation.id] || []
+    : [];
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      // Ajouter logique d'envoi ici si besoin
-      setNewMessage('');
-    }
+    if (!newMessage.trim() || !selectedConversation) return;
+
+    const message = {
+      id: Date.now().toString(),
+      text: newMessage,
+      sender: 'me' as const,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    setMessagesByConversation((prev) => ({
+      ...prev,
+      [selectedConversation.id]: [...(prev[selectedConversation.id] || []), message],
+    }));
+
+    setNewMessage('');
+
+    setTimeout(() => {
+      const reply = {
+        id: Date.now().toString() + '_r',
+        text: "That's nice! 😊",
+        sender: 'them' as const,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      };
+
+      setMessagesByConversation((prev) => ({
+        ...prev,
+        [selectedConversation.id]: [...(prev[selectedConversation.id] || []), reply],
+      }));
+    }, 1500);
   };
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50 overflow-hidden">
-      {/* Liste des conversations */}
       <div className={`md:block w-full md:w-1/3 lg:w-1/4 bg-white border-r border-gray-200 ${
         selectedConversation ? 'hidden md:block' : 'block'
       }`}>
@@ -120,10 +161,8 @@ export const MessagesView: React.FC = () => {
         </div>
       </div>
 
-      {/* Zone de conversation */}
       {selectedConversation ? (
         <div className="flex-1 flex flex-col h-full">
-          {/* Header FIXE */}
           <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-200 flex items-center space-x-3">
             <button
               className="md:hidden text-gray-500 hover:text-gray-800"
@@ -147,9 +186,8 @@ export const MessagesView: React.FC = () => {
             </div>
           </div>
 
-          {/* Messages SCROLLABLE */}
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-gray-50">
-            {mockMessages.map((message) => (
+            {messages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
@@ -170,15 +208,54 @@ export const MessagesView: React.FC = () => {
             ))}
           </div>
 
-          {/* Input FIXE */}
           <div className="sticky bottom-0 z-10 bg-white border-t border-gray-200 p-4">
-            <div className="flex items-center space-x-3">
-              <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+            <div className="flex items-center space-x-3 relative">
+              {/* Fichier joint */}
+              <label className="p-2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                 <Paperclip className="w-5 h-5" />
-              </button>
-              <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                <Smile className="w-5 h-5" />
-              </button>
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file && selectedConversation) {
+                      const fileMsg = {
+                        id: Date.now().toString(),
+                        text: `📎 Fichier: ${file.name}`,
+                        sender: 'me' as const,
+                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                      };
+                      setMessagesByConversation((prev) => ({
+                        ...prev,
+                        [selectedConversation.id]: [...(prev[selectedConversation.id] || []), fileMsg],
+                      }));
+                    }
+                  }}
+                />
+              </label>
+
+              {/* Emoji */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <Smile className="w-5 h-5" />
+                </button>
+                {showEmojiPicker && (
+                  <div className="absolute bottom-12 left-0 z-50">
+                    <Picker
+                      data={data}
+                      onEmojiSelect={(emoji: any) => {
+                        setNewMessage((prev) => prev + emoji.native);
+                        setShowEmojiPicker(false);
+                      }}
+                      theme="light"
+                    />
+                  </div>
+                )}
+              </div>
+
               <input
                 type="text"
                 value={newMessage}
@@ -187,6 +264,7 @@ export const MessagesView: React.FC = () => {
                 placeholder="Type a message..."
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
