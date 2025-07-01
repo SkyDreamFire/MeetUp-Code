@@ -10,6 +10,7 @@ export const EnligneView: React.FC = () => {
   const [activeConversation, setActiveConversation] = useState<any>(null);
   const [showMessageList, setShowMessageList] = useState(false);
   const [conversations, setConversations] = useState<any[]>([]);
+  const [hasClickedMessage, setHasClickedMessage] = useState(false);
 
   const handleRemoveConversation = (conversationId: string) => {
     setConversations(conversations.filter(conv => conv.id !== conversationId));
@@ -37,7 +38,7 @@ export const EnligneView: React.FC = () => {
 
   return (
     <div className="flex-1 bg-white">
-      <div className="border-b border-pink-200 bg-[#5a1d8c] text-white py-4">
+      <div className="border-b border-pink-200 bg-[#db77f7] text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-4">
@@ -46,9 +47,9 @@ export const EnligneView: React.FC = () => {
                 onChange={(e) => handleFilterChange({ gender: e.target.value })}
                 className="bg-transparent border border-white rounded px-3 py-1"
               >
-                <option value="Homme">Je suis un(e)</option>
-                <option value="Homme">Homme</option>
-                <option value="Femme">Femme</option>
+                <option value="" className="text-black">Je suis un(e)</option>
+                <option value="Homme" className="text-black">Homme</option>
+                <option value="Femme" className="text-black">Femme</option>
               </select>
 
               <select
@@ -56,9 +57,9 @@ export const EnligneView: React.FC = () => {
                 onChange={(e) => handleFilterChange({ lookingFor: e.target.value })}
                 className="bg-transparent border border-white rounded px-3 py-1"
               >
-                <option value="">Je recherche un(e)</option>
-                <option value="Homme">Homme</option>
-                <option value="Femme">Femme</option>
+                <option value="" className="text-black">Je recherche un(e)</option>
+                <option value="Homme" className="text-black">Homme</option>
+                <option value="Femme" className="text-black">Femme</option>
               </select>
 
               <select
@@ -66,8 +67,7 @@ export const EnligneView: React.FC = () => {
                 onChange={(e) => handleFilterChange({ location: e.target.value })}
                 className="bg-transparent border border-white rounded px-3 py-1"
               >
-                <option value="">De</option>
-                <option value="Tous Pays">Tous Pays</option>
+                <option value="Tous Pays" className="text-black">Tous Pays</option>
               </select>
 
               <div className="flex items-center space-x-2">
@@ -102,7 +102,7 @@ export const EnligneView: React.FC = () => {
               </div>
             </div>
 
-            <button className="bg-[#5C2E0A] text-white px-4 py-1 rounded hover:bg-[#3D1E06] transition-colors">
+            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-[#c94ced] transition-colors border:black">
               ENVOYER
             </button>
           </div>
@@ -115,7 +115,7 @@ export const EnligneView: React.FC = () => {
             <div key={user.id} className="bg-white rounded-lg shadow overflow-hidden">
               <div className="relative pb-[100%]">
                 <img
-                  src={user.photos?.[0]}
+                  src={user.photos?.[0] || `https://i.pravatar.cc/150?img=${user.id}`}
                   alt={user.name}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -153,7 +153,15 @@ export const EnligneView: React.FC = () => {
                         if (!conversations.find(conv => conv.id === user.id)) {
                           setConversations([...conversations, newConversation]);
                         }
-                        setShowMessageList(true);
+                        
+                        if (!hasClickedMessage) {
+                          // Premier clic : ouvrir directement le PopupMessage
+                          setActiveConversation(newConversation);
+                          setHasClickedMessage(true);
+                        } else {
+                          // Clics suivants : afficher la liste des messages
+                          setShowMessageList(true);
+                        }
                       }}
                     >
                       <MessageSquare className="w-5 h-5 text-gray-400 hover:text-blue-500" />
@@ -176,7 +184,6 @@ export const EnligneView: React.FC = () => {
               <option value="age">Âge</option>
             </select>
           </div>
-          <span className="text-gray-600">1 - 35 de 3993</span>
           <div className="flex items-center space-x-4">
             <button className="px-3 py-1 border rounded hover:bg-gray-100">&lt; Précédent</button>
             <div className="flex space-x-1">
@@ -191,32 +198,37 @@ export const EnligneView: React.FC = () => {
         </div>
       </div>
 
-      {showMessageList && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <MessageList
-            conversations={conversations}
-            onSelect={(conversation) => {
-              setActiveConversation(conversation);
-            }}
-            onClose={() => setShowMessageList(false)}
-            onRemove={handleRemoveConversation}
-          />
-        </div>
-      )}
+      <div className="fixed bottom-4 right-4 z-50 flex flex-row items-start space-x-4">
+        {activeConversation && (
+          <div className="flex-shrink-0">
+            <PopUpMessage
+              isOpen={true}
+              onClose={() => setActiveConversation(null)}
+              recipientName={activeConversation.name}
+              recipientAge={activeConversation.age}
+              recipientPhoto={activeConversation.avatar || 'https://i.pravatar.cc/150?img=' + activeConversation.id}
+              recipientLocation={activeConversation.location}
+              isOnline={activeConversation.isOnline}
+            />
+          </div>
+        )}
 
-      {activeConversation && (
-        <div className="fixed bottom-4 right-[21rem] z-50">
-          <PopUpMessage
-            isOpen={true}
-            onClose={() => setActiveConversation(null)}
-            recipientName={activeConversation.name}
-            recipientAge={activeConversation.age}
-            recipientPhoto={activeConversation.avatar}
-            recipientLocation={activeConversation.location}
-            isOnline={activeConversation.isOnline}
-          />
-        </div>
-      )}
+        {showMessageList && (
+          <div className="flex-shrink-0">
+            <MessageList
+              conversations={conversations.map(conv => ({
+                ...conv,
+                avatar: conv.avatar || `https://i.pravatar.cc/150?img=${conv.id}`
+              }))}
+              onSelect={(conversation) => {
+                setActiveConversation(conversation);
+              }}
+              onClose={() => setShowMessageList(false)}
+              onRemove={handleRemoveConversation}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
