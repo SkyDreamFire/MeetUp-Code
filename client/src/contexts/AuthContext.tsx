@@ -24,8 +24,6 @@ interface RegisterData {
   profession?: string;
   education?: string;
   biography?: string;
-
- 
   photoUrl?: string;
   address?: Address;
   acceptTerms: boolean;
@@ -35,6 +33,7 @@ interface RegisterData {
 
 interface AuthContextType {
   user: any;
+  loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   register: (data: RegisterData) => Promise<{ success: boolean; message?: string }>;
   signInWithGoogle: () => Promise<{ success: boolean; message?: string }>;
@@ -45,14 +44,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
+      setLoading(false);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setLoading(false);
     });
 
     return () => {
@@ -105,12 +107,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       profession: data.profession,
       education: data.education,
       biographie: data.biography,
-    
-      
       newsletter: data.newsletter,
       est_verifie: true,
       est_en_ligne: true,
-      derniere_connexion: new Date().toISOString()
+      derniere_connexion: new Date().toISOString(),
     }]);
 
     if (insertError) {
@@ -124,19 +124,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       age_max: 99,
       recherche: 'rencontre',
       pays_recherche: data.country,
-      but_recherche: 'amitie'
+      but_recherche: 'amitie',
     }]);
 
     await supabase.from('photos').insert([{
       utilisateur_id,
       url_photo: data.photoUrl || 'https://via.placeholder.com/150',
-      est_principale: true
+      est_principale: true,
     }]);
 
     if (data.interests && data.interests.length > 0) {
       const interestsData = data.interests.map((interet) => ({
         utilisateur_id,
-        nom_interet: interet
+        nom_interet: interet,
       }));
       await supabase.from('interets_utilisateur').insert(interestsData);
     }
@@ -146,22 +146,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         utilisateur_id,
         rue: data.address.street,
         ville: data.address.city,
-        code_postal: data.address.postalCode
+        code_postal: data.address.postalCode,
       }]);
     }
 
     return { success: true, message: 'Compte et profil créés avec succès.' };
   };
 
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/completer-profil`,
-      },
-    });
-    return error ? { success: false, message: error.message } : { success: true };
-  };
+ const signInWithGoogle = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    // options: {
+    //   redirectTo: `${window.location.origin}/dashboard`, // ✅ redirection directe vers dashboard
+    // },
+   
+options: {
+  redirectTo: `${window.location.origin}/completer-profil`, // 🔒 temporairement désactivé
+},
+
+
+  });
+  return error ? { success: false, message: error.message } : { success: true };
+};
+
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -169,7 +176,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
