@@ -38,7 +38,7 @@ export const EnligneView: React.FC = () => {
 
   return (
     <div className="flex-1 bg-white">
-      <div className="border-b border-pink-200 bg-[#db77f7] text-white py-4">
+      <div className="border-b border-pink-200 bg-secondary-400 text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-4">
@@ -102,7 +102,7 @@ export const EnligneView: React.FC = () => {
               </div>
             </div>
 
-            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-[#c94ced] transition-colors border:black">
+            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-secondary- transition-colors border:black">
               ENVOYER
             </button>
           </div>
