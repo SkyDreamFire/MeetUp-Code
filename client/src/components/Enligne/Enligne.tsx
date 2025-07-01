@@ -10,6 +10,7 @@ export const EnligneView: React.FC = () => {
   const [activeConversation, setActiveConversation] = useState<any>(null);
   const [showMessageList, setShowMessageList] = useState(false);
   const [conversations, setConversations] = useState<any[]>([]);
+  const [hasClickedMessage, setHasClickedMessage] = useState(false);
 
   const handleRemoveConversation = (conversationId: string) => {
     setConversations(conversations.filter(conv => conv.id !== conversationId));
@@ -115,7 +116,7 @@ export const EnligneView: React.FC = () => {
             <div key={user.id} className="bg-white rounded-lg shadow overflow-hidden">
               <div className="relative pb-[100%]">
                 <img
-                  src={user.photos?.[0]}
+                  src={user.photos?.[0] || `https://i.pravatar.cc/150?img=${user.id}`}
                   alt={user.name}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -153,7 +154,15 @@ export const EnligneView: React.FC = () => {
                         if (!conversations.find(conv => conv.id === user.id)) {
                           setConversations([...conversations, newConversation]);
                         }
-                        setShowMessageList(true);
+                        
+                        if (!hasClickedMessage) {
+                          // Premier clic : ouvrir directement le PopupMessage
+                          setActiveConversation(newConversation);
+                          setHasClickedMessage(true);
+                        } else {
+                          // Clics suivants : afficher la liste des messages
+                          setShowMessageList(true);
+                        }
                       }}
                     >
                       <MessageSquare className="w-5 h-5 text-gray-400 hover:text-blue-500" />
@@ -191,32 +200,37 @@ export const EnligneView: React.FC = () => {
         </div>
       </div>
 
-      {showMessageList && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <MessageList
-            conversations={conversations}
-            onSelect={(conversation) => {
-              setActiveConversation(conversation);
-            }}
-            onClose={() => setShowMessageList(false)}
-            onRemove={handleRemoveConversation}
-          />
-        </div>
-      )}
+      <div className="fixed bottom-4 right-4 z-50 flex flex-row items-start space-x-4">
+        {activeConversation && (
+          <div className="flex-shrink-0">
+            <PopUpMessage
+              isOpen={true}
+              onClose={() => setActiveConversation(null)}
+              recipientName={activeConversation.name}
+              recipientAge={activeConversation.age}
+              recipientPhoto={activeConversation.avatar || 'https://i.pravatar.cc/150?img=' + activeConversation.id}
+              recipientLocation={activeConversation.location}
+              isOnline={activeConversation.isOnline}
+            />
+          </div>
+        )}
 
-      {activeConversation && (
-        <div className="fixed bottom-4 right-[21rem] z-50">
-          <PopUpMessage
-            isOpen={true}
-            onClose={() => setActiveConversation(null)}
-            recipientName={activeConversation.name}
-            recipientAge={activeConversation.age}
-            recipientPhoto={activeConversation.avatar}
-            recipientLocation={activeConversation.location}
-            isOnline={activeConversation.isOnline}
-          />
-        </div>
-      )}
+        {showMessageList && (
+          <div className="flex-shrink-0">
+            <MessageList
+              conversations={conversations.map(conv => ({
+                ...conv,
+                avatar: conv.avatar || `https://i.pravatar.cc/150?img=${conv.id}`
+              }))}
+              onSelect={(conversation) => {
+                setActiveConversation(conversation);
+              }}
+              onClose={() => setShowMessageList(false)}
+              onRemove={handleRemoveConversation}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
