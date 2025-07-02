@@ -30,7 +30,8 @@ const PopUpMessage: React.FC<PopUpMessageProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 right-0 mb-4 mr-4 w-[420px] bg-white rounded-lg shadow-xl overflow-hidden z-50">
+    <div className="fixed bottom-4 right-4 flex items-end space-x-4 z-50">
+ <div className="fixed bottom-0 right-0 mb-4 mr-4 w-[320px] bg-white rounded-lg shadow-xl overflow-hidden z-50">
       <div className="p-4 border-b">
         <div className="flex items-start space-x-4">
           <div className="relative">
@@ -84,6 +85,8 @@ const PopUpMessage: React.FC<PopUpMessageProps> = ({
         </div>
       </form>
     </div>
+</div>
+   
   );
 };
 
