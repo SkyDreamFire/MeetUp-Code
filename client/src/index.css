@@ -19,3 +19,6 @@
     @apply transition-colors duration-200;
   }
 }
+.popup-shift {
+  transform: translateX(-340px);
+}

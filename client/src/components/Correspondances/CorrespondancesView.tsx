@@ -36,7 +36,7 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
     const matches = React.useMemo(() => {
     let list = matchesByTab[activeTab] || [];
     if (sortBy === 'nouveaux') {
-      list = list.filter(user => user.isNew);
+      list = list.filter(user => user.isOnline || (user as User & { isNew?: boolean }).isNew);
     }
     return list;
   }, [activeTab, sortBy, matchesByTab]);
@@ -111,7 +111,7 @@ export const CorrespondancesView: React.FC<{ onMessageUser?: (user: User) => voi
               </div>
               <h3 className="text-center text-lg font-semibold text-gray-800">{match.name} <span><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-user-round-icon lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg></button></span> </h3>
               <p className="text-center text-sm text-gray-600">{match.age} • {match.city}, {match.country}</p>
-              <p className="text-center text-sm text-gray-500 mt-1">Cherchant: {match.interest}</p>
+              <p className="text-center text-sm text-gray-500 mt-1">Cherchant: {match.seeking}</p>
               <p className="text-center text-xs text-gray-400">Reçu: Il y a 3 heures</p>
               <div className="mt-4 flex justify-center space-x-4 text-gray-500 text-sm">
                 <button className="hover:text-red-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-heart-icon lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
