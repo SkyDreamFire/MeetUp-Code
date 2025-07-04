@@ -215,7 +215,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/completer-profil`,
+        redirectTo: `${window.location.origin}/dashboard`,
       },
     });
     return error ? { success: false, message: error.message } : { success: true };
