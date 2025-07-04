@@ -17,8 +17,9 @@ export interface Preference {
   but_recherche: string;
 }
 
-export interface Interet {
-  nom: string;
+export interface Interest {
+  name: string;
+  id: number;
 }
 
 export interface StyleDeVie {
@@ -64,7 +65,7 @@ export interface ProfilComplet {
   derniere_connexion?: string;
   photos?: Photo[];
   preferences?: Preference;
-  interets_utilisateur?: { interets: Interet }[];
+  interets_utilisateur?: { interets: Interest }[];
   style_de_vie?: StyleDeVie;
   valeurs_culturelles?: ValeursCulturelles;
   apparence?: Apparence;

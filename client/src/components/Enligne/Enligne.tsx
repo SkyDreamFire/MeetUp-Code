@@ -38,7 +38,7 @@ export const EnligneView: React.FC = () => {
 
   return (
     <div className="flex-1 bg-white">
-      <div className="border-b border-pink-200 bg-secondary-400 text-white py-4">
+      <div className="border-b border-pink-200 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-4">
@@ -297,9 +297,9 @@ export const EnligneView: React.FC = () => {
               </div>
             </div>
 
-            <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-secondary- transition-colors border:black">
+            {/* <button className="bg-transparent text-white px-4 py-1 rounded hover:bg-secondary- transition-colors border:black">
               ENVOYER
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -314,7 +314,7 @@ export const EnligneView: React.FC = () => {
                   alt={user.name}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                {user.isNew && (
+                {user.isOnline && (
                   <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
                     NOUVEAU!
                   </span>
@@ -328,7 +328,7 @@ export const EnligneView: React.FC = () => {
                   <h3 className="font-semibold">{user.name}</h3>
                   <span className="text-sm text-gray-500">{user.age}</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">{user.location}</p>
+                <p className="text-sm text-gray-600 mt-1">{typeof user.location === 'string' ? user.location : `${user.location.lat}, ${user.location.lng}`}</p>
                 <div className="flex items-center justify-between mt-2">
                   <div className="flex space-x-2">
                     <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
@@ -383,7 +383,7 @@ export const EnligneView: React.FC = () => {
           <div className="flex items-center space-x-4">
             <button className="px-3 py-1 border rounded hover:bg-gray-100">&lt; Précédent</button>
             <div className="flex space-x-1">
-              <button className="w-8 h-8 flex items-center justify-center rounded bg-[#8B4513] text-white">1</button>
+              <button className="w-8 h-8 flex items-center justify-center rounded bg-gradient-to-r from-pink-500 to-purple-600 text-white">1</button>
               <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">2</button>
               <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">3</button>
               <span className="w-8 h-8 flex items-center justify-center">...</span>

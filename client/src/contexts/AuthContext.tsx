@@ -1,5 +1,10 @@
-// 📁 src/contexts/AuthContext.tsx
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 
 interface Address {
@@ -8,14 +13,16 @@ interface Address {
   postalCode?: string;
 }
 
-interface RegisterData {
+type Gender = 'male' | 'female';
+
+export interface RegisterData {
   email: string;
   password: string;
   confirmPassword: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  gender: 'male' | 'female';
+  gender: Gender;
   country: string;
   city?: string;
   localisation?: string;
@@ -29,33 +36,54 @@ interface RegisterData {
   acceptTerms: boolean;
   newsletter?: boolean;
   interests?: string[];
+  styleDeVie?: {
+    fumer?: string;
+    boire?: string;
+  };
+  apparence?: {
+    couleur_cheveux?: string;
+    couleur_yeux?: string;
+    taille?: number;
+    poids?: number;
+  };
+  preferences?: {
+    genre_prefere?: string;
+    age_min?: number;
+    age_max?: number;
+    pays_recherche?: string;
+    but_recherche?: string;
+  };
 }
 
 interface AuthContextType {
-  user: any;
+  user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   register: (data: RegisterData) => Promise<{ success: boolean; message?: string }>;
   signInWithGoogle: () => Promise<{ success: boolean; message?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    (async () => {
+      const { data } = await supabase.auth.getSession();
       setUser(data.session?.user ?? null);
       setLoading(false);
-    });
+    })();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+        if (session?.user) await ensureUserRecord(session.user);
+      }
+    );
 
     return () => {
       listener.subscription.unsubscribe();
@@ -64,8 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return { success: false, message: error.message };
-    return { success: true };
+    return error ? { success: false, message: error.message } : { success: true };
   };
 
   const register = async (data: RegisterData) => {
@@ -91,8 +118,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const utilisateur_id = signUpData.user.id;
+    const now = new Date().toISOString();
 
-    const { error: insertError } = await supabase.from('utilisateurs').insert([{
+    const { error: insertUserError } = await supabase.from('utilisateurs').insert([{
       utilisateur_id,
       email: data.email,
       nom: data.lastName,
@@ -107,25 +135,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       profession: data.profession,
       education: data.education,
       biographie: data.biography,
-      newsletter: data.newsletter,
       est_verifie: true,
       est_en_ligne: true,
-      derniere_connexion: new Date().toISOString(),
+      derniere_connexion: now,
+      cree_le: now,
+      mis_a_jour_le: now,
+      user_id: utilisateur_id,
     }]);
 
-    if (insertError) {
-      return { success: false, message: insertError.message };
-    }
+    if (insertUserError) return { success: false, message: insertUserError.message };
 
-    await supabase.from('preferences').insert([{
+    await supabase.from('preferences').upsert([{
       utilisateur_id,
-      genre_prefere: 'peu_importe',
-      age_min: 18,
-      age_max: 99,
+      genre_prefere: data.preferences?.genre_prefere ?? 'peu_importe',
+      age_min: data.preferences?.age_min ?? 18,
+      age_max: data.preferences?.age_max ?? 99,
       recherche: 'rencontre',
-      pays_recherche: data.country,
-      but_recherche: 'amitie',
-    }]);
+      pays_recherche: data.preferences?.pays_recherche ?? data.country,
+      but_recherche: data.preferences?.but_recherche ?? 'amitie',
+    }], { onConflict: 'utilisateur_id' });
 
     await supabase.from('photos').insert([{
       utilisateur_id,
@@ -133,46 +161,97 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       est_principale: true,
     }]);
 
-    if (data.interests && data.interests.length > 0) {
-      const interestsData = data.interests.map((interet) => ({
-        utilisateur_id,
-        nom_interet: interet,
-      }));
-      await supabase.from('interets_utilisateur').insert(interestsData);
+    if (data.interests?.length) {
+      for (const nomInteret of data.interests) {
+        const { data: existingInteret } = await supabase
+          .from('interets')
+          .select('interet_id')
+          .eq('nom', nomInteret)
+          .maybeSingle();
+
+        let interetId: string;
+        if (existingInteret) {
+          interetId = existingInteret.interet_id;
+        } else {
+          const { data: newInteret } = await supabase
+            .from('interets')
+            .insert([{ nom: nomInteret }])
+            .select()
+            .single();
+          interetId = newInteret!.interet_id;
+        }
+
+        await supabase.from('interets_utilisateur').insert([{ utilisateur_id, interet_id: interetId }]);
+      }
     }
 
-    if (data.address) {
-      await supabase.from('adresses').insert([{
-        utilisateur_id,
-        rue: data.address.street,
-        ville: data.address.city,
-        code_postal: data.address.postalCode,
-      }]);
-    }
+    await supabase.from('profil_apercu').upsert([{
+      utilisateur_id,
+      education: data.education,
+      profession: data.profession,
+    }], { onConflict: 'utilisateur_id' });
 
-    return { success: true, message: 'Compte et profil créés avec succès.' };
+    await supabase.from('style_de_vie').upsert([{
+      utilisateur_id,
+      fumer: data.styleDeVie?.fumer ?? 'non spécifié',
+      boire: data.styleDeVie?.boire ?? 'non spécifié',
+    }], { onConflict: 'utilisateur_id' });
+
+    await supabase.from('apparence').upsert([{
+      utilisateur_id,
+      couleur_cheveux: data.apparence?.couleur_cheveux ?? 'non spécifié',
+      couleur_yeux: data.apparence?.couleur_yeux ?? 'non spécifié',
+      taille: data.apparence?.taille ?? null,
+      poids: data.apparence?.poids ?? null,
+    }], { onConflict: 'utilisateur_id' });
+
+    return {
+      success: true,
+      message: 'Compte et profil créés avec succès. Vérifiez votre boîte mail.',
+    };
   };
 
- const signInWithGoogle = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-     redirectTo: `${window.location.origin}/dashboard`, // ✅ redirection directe vers dashboard
-     },
-   
-// options: {
-//   redirectTo: `${window.location.origin}/completer-profil`, // 🔒 temporairement désactivé
-// },
-
-
-  });
-  return error ? { success: false, message: error.message } : { success: true };
-};
-
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/completer-profil`,
+      },
+    });
+    return error ? { success: false, message: error.message } : { success: true };
+  };
 
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
+  };
+
+  const ensureUserRecord = async (supabaseUser: User) => {
+    const { data: existing } = await supabase
+      .from('utilisateurs')
+      .select('utilisateur_id')
+      .eq('utilisateur_id', supabaseUser.id)
+      .maybeSingle();
+
+    if (existing) return;
+
+    const now = new Date().toISOString();
+
+    await supabase.from('utilisateurs').insert([{
+      utilisateur_id: supabaseUser.id,
+      email: supabaseUser.email,
+      nom: supabaseUser.user_metadata?.lastName ?? '',
+      prenom: supabaseUser.user_metadata?.firstName ?? '',
+      date_naissance: null,
+      genre: 'homme',
+      pays: supabaseUser.user_metadata?.country ?? '',
+      est_verifie: true,
+      est_en_ligne: true,
+      derniere_connexion: now,
+      cree_le: now,
+      mis_a_jour_le: now,
+      user_id: supabaseUser.id,
+    }]);
   };
 
   return (
